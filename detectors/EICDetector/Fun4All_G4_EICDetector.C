@@ -213,6 +213,7 @@ int Fun4All_G4_EICDetector(
   if (Input::READEIC)
   {
     //! apply EIC beam parameter following EIC CDR
+    INPUTGENERATOR::EICFileReader->SetFirstEntry(skip);
     Input::ApplyEICBeamParameter(INPUTGENERATOR::EICFileReader);
   }
 
@@ -478,21 +479,21 @@ int Fun4All_G4_EICDetector(
     if (Enable::TRACKING_EVAL)
     {
       eval->set_do_TRACKS(true);
-      //eval->set_do_HITS(true); //Potential problem 
+      eval->set_do_HITS(true);  
       eval->set_do_PROJECTIONS(true);
       if (G4TRACKING::DISPLACED_VERTEX) 
         eval->set_do_VERTEX(true);
      }
-    //if (Enable::CEMC_EVAL) eval->set_do_CEMC(true); //Potential problem
+    if (Enable::CEMC_EVAL) eval->set_do_CEMC(true); 
     if (Enable::EEMC_EVAL) eval->set_do_EEMC(true);
-    //if (Enable::FEMC_EVAL) eval->set_do_FEMC(true); //Potential problem
+    if (Enable::FEMC_EVAL) eval->set_do_FEMC(true); 
     if (Enable::HCALIN_EVAL) eval->set_do_HCALIN(true);
     if (Enable::HCALOUT_EVAL) eval->set_do_HCALOUT(true);
     if (Enable::FHCAL_EVAL) eval->set_do_FHCAL(true);
-    //if (Enable::FHCAL_EVAL || Enable::FEMC_EVAL || Enable::EEMC_EVAL) //Potential problem 
-    ///  eval->set_do_CLUSTERS(true);
+    if (Enable::FHCAL_EVAL || Enable::FEMC_EVAL || Enable::EEMC_EVAL)  
+       eval->set_do_CLUSTERS(true);
     
-    //eval->set_do_MCPARTICLES(true);
+    eval->set_do_MCPARTICLES(true);  
     se->registerSubsystem(eval);
   }
   if (use_individual_evaluators) 

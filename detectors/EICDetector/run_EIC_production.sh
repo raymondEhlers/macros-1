@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export HOME=/sphenix/u/${LOGNAME}
-source /cvmfs/eic.opensciencegrid.org/ecce/gcc-8.3/opt/fun4all/core/bin/ecce_setup.sh -n new.5
+source /cvmfs/eic.opensciencegrid.org/ecce/gcc-8.3/opt/fun4all/core/bin/ecce_setup.sh -n new
 
 export ECCE=/sphenix/user/cdean/ECCE
 export MYINSTALL=$ECCE/install
