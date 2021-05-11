@@ -48,8 +48,9 @@ else:
 
 def getNumEvtsInFile(theFile):
     inputFile = TFile(theFile)
-    nEvents = inputFile.Get("nEvents")
-    return nEvents.GetString().Atoi()
+    return inputFile.Get("EICTree").GetEntries()
+    #nEvents = inputFile.Get("nEvents")
+    #return nEvents.GetString().Atoi()
 
 
 def makeCondorJob(PWG):
@@ -64,7 +65,7 @@ def makeCondorJob(PWG):
     os.makedirs("{}/log".format(condorDir), exist_ok=True)
     submitScriptName = "{}/submitJobs.sh".format(condorDir)
     submitScript = open("{}".format(submitScriptName), "w")
-    submitScript.write("#!/bin/bash\n")
+    submitScript.write("#!{}\n".format(myShell))
     #Now make output directory (plus eval folder)
     outputPath = "{}/{}/{}/{}".format(simulationsTopDir, thisWorkingGroup, thisGenerator, thisCollision)
     outputEvalPath = outputPath + "/eval"
