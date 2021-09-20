@@ -93,7 +93,7 @@ void TTL_Init()
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::positionToVtx[1][0] = 65.;
     G4TTL::minExtension[1][0]  = 100.;
     G4TTL::maxExtension[1][0]  = 0.;
-  } if (G4TTL::SETTING::optionGeo == 3){
+  } if (G4TTL::SETTING::optionGeo == 3 || G4TTL::SETTING::optionGeo == 5){
     cout << "TTL setup infront of ECals with 1 layers fwd/bwd & 1 layer barrel, lower barrel layer" << endl;
     G4TTL::positionToVtx[1][0] = 50.;
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::positionToVtx[1][0] = 65.;
@@ -113,6 +113,11 @@ void TTL_Init()
     G4TTL::layer[1]    = 2;
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::layer[1]    = 1;
     G4TTL::layer[2]    = 3;
+  } if (G4TTL::SETTING::optionGeo == 5){
+    // Option 5 is 1 layer fwd/bwd, with LYSO in the central barrel. We use the geometry for option 3 since it's the same.
+    // However, we create a separate option to simplify setting up the configuration.
+    cout << "TTL setup using LYSO in central barrel" << endl;
+    G4TTL::SETTING::optionLYSO = true;
   }
 
   if (G4TTL::SETTING::optionDR == 2 && G4TTL::SETTING::optionGeo == 4 ){
