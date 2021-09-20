@@ -26,6 +26,10 @@ R__LOAD_LIBRARY(libfun4all.so)
 
 int Fun4All_G4_EICDetector(
     const int nEvents = 1,
+    const double particlemomMin = -1,
+    const double particlemomMax = -1,
+    const string detectorSettings = "TTLGEO_5",
+    const TString generatorSettings = "PYTHIA8",
     const string &inputFile = "https://www.phenix.bnl.gov/WWW/publish/phnxbld/sPHENIX/files/sPHENIX_G4Hits_sHijing_9-11fm_00000_00010.root",
     const string &outputFile = "G4EICDetector.root",
     const string &embed_input_file = "https://www.phenix.bnl.gov/WWW/publish/phnxbld/sPHENIX/files/sPHENIX_G4Hits_sHijing_9-11fm_00000_00010.root",
@@ -92,6 +96,20 @@ int Fun4All_G4_EICDetector(
   // if you use a filelist
   //INPUTEMBED::listfile[0] = embed_input_file;
 
+  if(particlemomMin==-1 && particlemomMax==-1){
+    if (generatorSettings.find("PYTHIA6") != std::string::npos) {
+      Input::PYTHIA6 = true;
+    } else if (generatorSettings.find("PYTHIA8") != std::string::npos) {
+      Input::PYTHIA8 = true;
+    }
+  }
+  // Simple multi particle generator in eta/phi/pt ranges
+  Input::SIMPLE = false;
+  if (particlemomMin>-1 && particlemomMax>-1){
+    Input::SIMPLE = true;
+    Input::SIMPLE_VERBOSITY = 0;
+  }
+
   // Use Pythia 8
   Input::PYTHIA8 = true;
   PYTHIA8::config_file = inputFile;
@@ -140,25 +158,56 @@ int Fun4All_G4_EICDetector(
   // Simple Input generator:
   // if you run more than one of these Input::SIMPLE_NUMBER > 1
   // add the settings for other with [1], next with [2]...
-  if (Input::SIMPLE)
-  {
-    INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi-", 5);
-    if (Input::HEPMC || Input::EMBED)
-    {
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_reuse_existing_vertex(true);
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_existing_vertex_offset_vector(0.0, 0.0, 0.0);
+  if (Input::SIMPLE){
+    if (generatorSettings.Contains("SimplePion"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi-", 1);
+    else if (generatorSettings.Contains("SimpleKaon"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("kaon-", 1);
+    else if (generatorSettings.Contains("SimpleProton"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("proton", 1);
+    else if (generatorSettings.Contains("SimplePhoton"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("gamma", 1);
+    else if (generatorSettings.Contains("SimpleNeutron"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("neutron", 1);
+    else if (generatorSettings.Contains("SimpleElectron"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("e-", 1);
+    else if (generatorSettings.Contains("SimplePiZero"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi0", 1);
+    else {
+      std::cout << "You didn't specify which particle you wanted to generate, exiting" << std::endl;
+      return 0;
     }
+    INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
+                                                                              PHG4SimpleEventGenerator::Uniform,
+                                                                              PHG4SimpleEventGenerator::Uniform);
+    INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_mean(0., 0., 0.);
+    INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_width(0., 0., 5.);
+    if (generatorSettings.Contains("central"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-1.8, 1.2);
+    else if (generatorSettings.Contains("bck"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4, -1.7);
+    else if (generatorSettings.Contains("fwd"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(1.1, 4.0);
     else
-    {
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
-                                                                                PHG4SimpleEventGenerator::Uniform,
-                                                                                PHG4SimpleEventGenerator::Uniform);
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_mean(0., 0., 0.);
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_width(0., 0., 5.);
-    }
-    INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-3, 3);
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4.0, 4.0);
     INPUTGENERATOR::SimpleEventGenerator[0]->set_phi_range(-M_PI, M_PI);
-    INPUTGENERATOR::SimpleEventGenerator[0]->set_pt_range(0.1, 20.);
+    INPUTGENERATOR::SimpleEventGenerator[0]->set_p_range(particlemomMin, particlemomMax);
+  }
+  if(particlemomMin>-1 && particlemomMax == -1){
+    PHG4ParticleGenerator *gen = new PHG4ParticleGenerator("PGENERATOR");
+    gen->set_name("pi-");
+    // gen->set_name("pi0");
+    gen->set_vtx(0, 0, 0);
+    gen->set_eta_range(-4.0, 4.0);            // around midrapidity
+    if(particlemomMin > -1) {
+      gen->set_mom_range(particlemomMin, particlemomMin);                   // fixed 4 GeV/c
+    }
+    else {
+      gen->set_mom_range(1, 60);                   // fixed 4 GeV/c
+    }
+    gen->set_phi_range(0., 2* M_PI);  // 0-90 deg
+    // gen->Verbosity(1);  // 0-90 deg
+    se->registerSubsystem(gen);
   }
   // Upsilons
   // if you run more than one of these Input::UPSILON_NUMBER > 1
@@ -187,13 +236,16 @@ int Fun4All_G4_EICDetector(
   // pythia6
   if (Input::PYTHIA6)
   {
-    INPUTGENERATOR::Pythia6->set_config_file(string(getenv("CALIBRATIONROOT")) + "/Generators/phpythia6_ep.cfg");
+    //INPUTGENERATOR::Pythia6->set_config_file(string(getenv("CALIBRATIONROOT")) + "/Generators/phpythia6_ep.cfg");
+    INPUTGENERATOR::Pythia6->set_config_file(inputFile);
     //! apply EIC beam parameter following EIC CDR
     Input::ApplyEICBeamParameter(INPUTGENERATOR::Pythia6);
   }
   // pythia8
   if (Input::PYTHIA8)
   {
+    // Configuration file
+    PYTHIA8::config_file = inputFile;
     //! apply EIC beam parameter following EIC CDR
     Input::ApplyEICBeamParameter(INPUTGENERATOR::Pythia8);
   }
@@ -290,7 +342,13 @@ int Fun4All_G4_EICDetector(
   Enable::ETTL = true;
   Enable::CTTL = true;
   G4TTL::SETTING::optionCEMC = false;
-  G4TTL::SETTING::optionGeo = 1;
+  if (detectorSettings.find("TTLGEO_") != std::string::npos) {
+    auto pos = detectorSettings.find("TTLGEO_");
+    G4TTL::SETTING::optionGeo = int(detectorSettings.substr(pos+7, pos+8));
+  }
+  else {
+    G4TTL::SETTING::optionGeo = 1;
+  }
 
   Enable::TRACKING = true;
   Enable::TRACKING_EVAL = Enable::TRACKING && false;
