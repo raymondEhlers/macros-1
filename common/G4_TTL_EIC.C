@@ -450,7 +450,7 @@ int make_barrel_layer_LYSO_basic(string name, PHG4Reco *g4Reco,
 
   if (TRACKING::FastKalmanFilter)
   {
-    float resLGAD_barrel = resLGAD;
+    float resLGAD_barrel = G4TTL::PositionResolution;
     if(G4TTL::SETTING::optionLYSO){
       resLGAD_barrel = 35e-1; // https://cds.cern.ch/record/2667167/files/CMS-TDR-020.pdf page 33 bottom
     }

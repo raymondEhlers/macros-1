@@ -97,9 +97,9 @@ int Fun4All_G4_EICDetector(
   //INPUTEMBED::listfile[0] = embed_input_file;
 
   if(particlemomMin==-1 && particlemomMax==-1){
-    if (generatorSettings.find("PYTHIA6") != std::string::npos) {
+    if (generatorSettings.Contains("PYTHIA6")) {
       Input::PYTHIA6 = true;
-    } else if (generatorSettings.find("PYTHIA8") != std::string::npos) {
+    } else if (generatorSettings.Contains("PYTHIA8")) {
       Input::PYTHIA8 = true;
     }
   }
@@ -342,9 +342,10 @@ int Fun4All_G4_EICDetector(
   Enable::ETTL = true;
   Enable::CTTL = true;
   G4TTL::SETTING::optionCEMC = false;
-  if (detectorSettings.find("TTLGEO_") != std::string::npos) {
-    auto pos = detectorSettings.find("TTLGEO_");
-    G4TTL::SETTING::optionGeo = int(detectorSettings.substr(pos+7, pos+8));
+  std::string ttlSettingToFind = "TTLGEO_";
+  if (detectorSettings.find(ttlSettingToFind) != std::string::npos) {
+    auto pos = detectorSettings.find(ttlSettingToFind);
+    G4TTL::SETTING::optionGeo = std::stoi(detectorSettings.substr(pos + ttlSettingToFind.size(), pos + ttlSettingToFind.size() + 1));
   }
   else {
     G4TTL::SETTING::optionGeo = 1;
