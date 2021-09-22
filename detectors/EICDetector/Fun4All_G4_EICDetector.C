@@ -101,6 +101,8 @@ int Fun4All_G4_EICDetector(
       Input::PYTHIA6 = true;
     } else if (generatorSettings.Contains("PYTHIA8")) {
       Input::PYTHIA8 = true;
+    } else if (generatorSettings.Contains("READEIC")) {
+      Input::READEIC = true;
     }
   }
   // Simple multi particle generator in eta/phi/pt ranges
