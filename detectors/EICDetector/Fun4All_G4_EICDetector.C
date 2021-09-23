@@ -594,7 +594,7 @@ int Fun4All_G4_EICDetector(
 
   if (Enable::FWDJETS) Jet_FwdReco();
 
-  string outputroot = outputFile;
+  string outputroot = outdir + "/" + outputFile;
   string remove_this = ".root";
   size_t pos = outputroot.find(remove_this);
   if (pos != string::npos)
