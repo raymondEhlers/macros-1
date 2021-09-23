@@ -466,7 +466,7 @@ int Fun4All_G4_EICDetector(
   // Enable::B0_FULLHITPLANE = true;
 
   // Enabling the event evaluator?
-  Enable::EVENT_EVAL = false;
+  Enable::EVENT_EVAL = true;
   // EVENT_EVALUATOR::Verbosity = 1;
   // EVENT_EVALUATOR::EnergyThreshold = 0.05; // GeV
 
