@@ -57,7 +57,7 @@ namespace G4TTL
   // This detector can provide better coverage and provide further constraints in track
   // reconstruction within high pseudorapidity regions.
 
-  const double PositionResolution(30e-4);
+  double PositionResolution(30e-4);
 
 }  // namespace G4TTL
 
@@ -93,7 +93,7 @@ void TTL_Init()
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::positionToVtx[1][0] = 65.;
     G4TTL::minExtension[1][0]  = 100.;
     G4TTL::maxExtension[1][0]  = 0.;
-  } if (G4TTL::SETTING::optionGeo == 3 || G4TTL::SETTING::optionGeo == 5){
+  } if (G4TTL::SETTING::optionGeo == 3 || G4TTL::SETTING::optionGeo == 5 || G4TTL::SETTING::optionGeo == 6){
     cout << "TTL setup infront of ECals with 1 layers fwd/bwd & 1 layer barrel, lower barrel layer" << endl;
     G4TTL::positionToVtx[1][0] = 50.;
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::positionToVtx[1][0] = 65.;
@@ -118,6 +118,9 @@ void TTL_Init()
     // However, we create a separate option to simplify setting up the configuration.
     cout << "TTL setup using LYSO in central barrel" << endl;
     G4TTL::SETTING::optionLYSO = true;
+  } if (G4TTL::SETTING::optionGeo == 6){
+    cout << "TTL setup with position reslution of 55e-4" << endl;
+    G4TTL::PositionResolution = 55e-4;
   }
 
   if (G4TTL::SETTING::optionDR == 2 && G4TTL::SETTING::optionGeo == 4 ){
