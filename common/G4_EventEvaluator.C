@@ -11,6 +11,7 @@ namespace Enable
 {
   // use Enable::EVENT_EVAL = true; in your macro
   bool EVENT_EVAL = false;
+  bool EVENT_EVAL_DO_HITS = false;
 }  // namespace Enable
 
 namespace EVENT_EVALUATOR
@@ -30,7 +31,10 @@ void Event_Eval(const std::string &filename)
   if (Enable::TRACKING)
   {
     eval->set_do_TRACKS(true);
-    //eval->set_do_HITS(true);
+    if (Enable::EVENT_EVAL_DO_HITS) {
+      std::cout << "Enabled hits in event eval.\n";
+      eval->set_do_HITS(true);
+    }
     eval->set_do_PROJECTIONS(true);
     if (G4TRACKING::DISPLACED_VERTEX)
       eval->set_do_VERTEX(true);

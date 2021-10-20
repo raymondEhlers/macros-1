@@ -467,6 +467,9 @@ int Fun4All_G4_EICDetector(
 
   // Enabling the event evaluator?
   Enable::EVENT_EVAL = true;
+  if (detectorSettings.find("HITS") != std::string::npos) {
+    Enable::EVENT_EVAL_DO_HITS = true;
+  }
   // EVENT_EVALUATOR::Verbosity = 1;
   // EVENT_EVALUATOR::EnergyThreshold = 0.05; // GeV
 
