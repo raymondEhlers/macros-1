@@ -42,6 +42,7 @@ void TrackingInit()
   TRACKING::FastKalmanFilter = new PHG4TrackFastSim("PHG4TrackFastSim");
   TRACKING::FastKalmanFilterSiliconTrack = new PHG4TrackFastSim("FastKalmanFilterSiliconTrack");
   TRACKING::FastKalmanFilterInnerTrack = new PHG4TrackFastSim("FastKalmanFilterInnerTrack");
+  TRACKING::FastKalmanFilterTTLonly = new PHG4TrackFastSim("FastKalmanFilterTTLonly");
 }
 
 void InitFastKalmanFilter(PHG4TrackFastSim *kalman_filter)
@@ -179,6 +180,17 @@ void Tracking_Reco()
   TRACKING::FastKalmanFilterSiliconTrack->set_trackmap_out_name("SiliconTrackMap");
   TRACKING::FastKalmanFilterSiliconTrack->enable_vertexing(false);
   se->registerSubsystem(TRACKING::FastKalmanFilterSiliconTrack);
+
+  if (TRACKING::FastKalmanFilterTTLonly == nullptr)
+  {
+    cout << __PRETTY_FUNCTION__ << " : missing the expected initialization for TRACKING::FastKalmanFilterTTLonly." << endl;
+    exit(1);
+  }
+  InitFastKalmanFilter(TRACKING::FastKalmanFilterTTLonly);
+  TRACKING::FastKalmanFilterTTLonly->Verbosity(verbosity);
+  TRACKING::FastKalmanFilterTTLonly->set_trackmap_out_name("TTLTrackMap");
+  TRACKING::FastKalmanFilterTTLonly->enable_vertexing(false);
+  se->registerSubsystem(TRACKING::FastKalmanFilterTTLonly);
   return;
 }
 
