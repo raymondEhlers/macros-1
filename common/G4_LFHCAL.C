@@ -167,6 +167,19 @@ void LFHCALSetup(PHG4Reco *g4Reco)
   if (AbsorberActive) fhcal->SetAbsorberActive();
 
   g4Reco->registerSubsystem(fhcal);
+
+  if (TRACKING::FastKalmanFilter)
+  {
+    double segmentthickness = 20;
+    double zposseg = G4LFHCAL::Gz0 - (G4LFHCAL::Gdz/2) + (segmentthickness/2);
+    int nsegments = G4LFHCAL::Gdz/segmentthickness;
+    for(int iseg=0;iseg<nsegments;iseg++){
+      TRACKING::FastKalmanFilter->add_zplane_state(Form("LFHCAL_%d", iseg), zposseg);
+      TRACKING::ProjectionNames.insert(Form("LFHCAL_%d", iseg));
+      zposseg+=segmentthickness;
+    }
+  }
+
 }
 
 void LFHCAL_Cells(int verbosity = 0)

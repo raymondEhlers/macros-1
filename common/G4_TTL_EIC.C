@@ -37,6 +37,8 @@ namespace G4TTL
   double positionToVtx[3][3]    = { {-169., -172., -309.5}, {80., 114.7, 0. }, { 287., 289., 340.} };
   double minExtension[3][3]     = { {8, 8, 15.3}, {218, 180, 0 }, {11.62, 11.7, 13.8 } };
   double maxExtension[3][3]     = { {61., 61. , 200}, {-40, 0, 0 }, {170., 170., 250  } };
+  double xoffsetFTTLIP6[3]         = { -6., -6., -6.};
+  double xoffsetFTTLIP8[3]      = { 8.4, 8.4, 8.4};
   namespace SETTING
   {
     bool optionCEMC  = true;
@@ -87,13 +89,13 @@ void TTL_Init()
 
   if (G4TTL::SETTING::optionGeo == 1){
     cout << "TTL setup infront of ECals with 2 layers fwd/bwd & 1 layer barrel" << endl;
-  } if (G4TTL::SETTING::optionGeo == 2){
+  } else if (G4TTL::SETTING::optionGeo == 2){
     cout << "TTL setup infront of ECals with 2 layers fwd/bwd & 1 layer barrel, lower barrel layer" << endl;
     G4TTL::positionToVtx[1][0] = 50.;
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::positionToVtx[1][0] = 65.;
     G4TTL::minExtension[1][0]  = 100.;
     G4TTL::maxExtension[1][0]  = 0.;
-  } if (G4TTL::SETTING::optionGeo == 3 || G4TTL::SETTING::optionGeo == 5 || G4TTL::SETTING::optionGeo == 6){
+  } else if (G4TTL::SETTING::optionGeo == 3 || G4TTL::SETTING::optionGeo == 5 || G4TTL::SETTING::optionGeo == 6){
     cout << "TTL setup infront of ECals with 1 layers fwd/bwd & 1 layer barrel, lower barrel layer" << endl;
     G4TTL::positionToVtx[1][0] = 50.;
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::positionToVtx[1][0] = 65.;
@@ -107,20 +109,37 @@ void TTL_Init()
     G4TTL::minExtension[2][0]  = G4TTL::minExtension[2][1];
     G4TTL::maxExtension[0][0]  = G4TTL::maxExtension[0][1];
     G4TTL::maxExtension[2][0]  = G4TTL::maxExtension[2][1];
-  } if (G4TTL::SETTING::optionGeo == 4){
+  } else if (G4TTL::SETTING::optionGeo == 4){
     cout << "TTL setup infront of ECals  with 2 layers fwd/bwd & 1 layer barrel, 1 layer before HCals everywhere" << endl;
     G4TTL::layer[0]    = 3;
     G4TTL::layer[1]    = 2;
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::layer[1]    = 1;
     G4TTL::layer[2]    = 3;
-  } if (G4TTL::SETTING::optionGeo == 5){
+  } else if (G4TTL::SETTING::optionGeo == 5){
     // Option 5 is 1 layer fwd/bwd, with LYSO in the central barrel. We use the geometry for option 3 since it's the same.
     // However, we create a separate option to simplify setting up the configuration.
     cout << "TTL setup using LYSO in central barrel" << endl;
     G4TTL::SETTING::optionLYSO = true;
-  } if (G4TTL::SETTING::optionGeo == 6){
+  } else if (G4TTL::SETTING::optionGeo == 6){
     cout << "TTL setup with position reslution of 55e-4" << endl;
     G4TTL::PositionResolution = 55e-4;
+  } else if(G4TTL::SETTING::optionGeo == 7){
+    cout << "TTL one forward disk in front of dRICH and two in front of FEMC with radius of 60cm" << endl;
+    G4TTL::layer[2]            = 3;
+    // disk in front of dRICH (full eta)
+    G4TTL::minExtension[2][0] = 7.0;
+    G4TTL::maxExtension[2][0] = 87;
+    G4TTL::positionToVtx[2][0] = 182.;
+    G4TTL::xoffsetFTTLIP6[0] = -2.7;
+    G4TTL::xoffsetFTTLIP8[0] = 3.0;
+    // disks in front of FEMC (only high eta)
+    G4TTL::maxExtension[2][1] = 60.;
+    G4TTL::maxExtension[2][2] = 60.;
+    G4TTL::positionToVtx[2][1] = 287.;
+    G4TTL::positionToVtx[2][2] = 289.;
+  } else if(G4TTL::SETTING::optionGeo == 8){
+    cout << "TTL forward disk 1 reduced in radius to 60cm" << endl;
+    G4TTL::maxExtension[2][0] = 60.;
   }
 
   if (G4TTL::SETTING::optionDR == 2 && G4TTL::SETTING::optionGeo == 4 ){
@@ -141,14 +160,11 @@ void FTTLSetup(PHG4Reco *g4Reco, TString fttloption = "")
   const double mm = .1 * cm;
   const double um = 1e-3 * mm;
 
-  double xoffset = 0;
-  if (Enable::IP6) xoffset = -6.0;
-  if (Enable::IP8) xoffset = 8.4;
 
   for (Int_t i = 0; i < G4TTL::layer[2]; i++){
     cout << G4TTL::positionToVtx[2][i] << "\t" << G4TTL::minExtension[2][i] << "\t" << G4TTL::maxExtension[2][i] << endl;
     if(!G4TTL::SETTING::optionBasicGeo){
-      make_forward_station(Form("FTTL_%d", i), g4Reco, G4TTL::positionToVtx[2][i],  G4TTL::minExtension[2][i], G4TTL::maxExtension[2][i], 85*um, xoffset);
+      make_forward_station(Form("FTTL_%d", i), g4Reco, G4TTL::positionToVtx[2][i],  G4TTL::minExtension[2][i], G4TTL::maxExtension[2][i], 85*um, Enable::IP8 ? G4TTL::xoffsetFTTLIP8[i] : G4TTL::xoffsetFTTLIP6[i]);
     } else {
       make_forward_station_basic(Form("FTTL_%d", i), g4Reco, G4TTL::positionToVtx[2][i],  G4TTL::minExtension[2][i], G4TTL::maxExtension[2][i], 85*um);
     }

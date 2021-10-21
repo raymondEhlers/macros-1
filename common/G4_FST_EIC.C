@@ -153,6 +153,8 @@ int make_LANL_FST_station(string name, PHG4Reco *g4Reco,
                                              50e-4 / sqrt(12.),                 //      const float lonres, *ignored in plane detector*
                                              1,                                 //      const float eff,
                                              0);                                //      const float noise
+    TRACKING::FastKalmanFilter->add_zplane_state(name, zpos);
+    TRACKING::ProjectionNames.insert(name);
   }
   return 0;
 }

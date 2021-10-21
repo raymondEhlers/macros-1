@@ -306,8 +306,9 @@ int Fun4All_G4_EICDetector(
   // Enable::DSTREADER = true;
 
   // turn the display on (default off)
-  //  Enable::DISPLAY = true;
-
+  if (detectorSettings.find("display") != std::string::npos) {
+    Enable::DISPLAY = true;
+  }
   //======================
   // What to run
   //======================
@@ -327,10 +328,6 @@ int Fun4All_G4_EICDetector(
   Enable::HFARBWD_MAGNETS = true;
   Enable::HFARBWD_VIRTUAL_DETECTORS = true;
 
-  // gems
-  Enable::EGEM = true;
-  Enable::FGEM = true;
-  // Enable::BGEM = true; // not yet defined in this model
   Enable::RWELL = true;
   // barrel tracker
   Enable::TrackingService = true;
@@ -352,6 +349,13 @@ int Fun4All_G4_EICDetector(
   else {
     G4TTL::SETTING::optionGeo = 1;
   }
+
+  // gems
+  Enable::EGEM = true;
+  Enable::FGEM = true;
+  if(G4TTL::SETTING::optionGeo == 7)
+    Enable::FGEM = false;
+  // Enable::BGEM = true; // not yet defined in this model
 
   Enable::TRACKING = true;
   Enable::TRACKING_EVAL = Enable::TRACKING && false;
@@ -661,11 +665,13 @@ int Fun4All_G4_EICDetector(
   //-----------------
   if (Enable::DISPLAY)
   {
-    DisplayOn();
-
-    gROOT->ProcessLine("Fun4AllServer *se = Fun4AllServer::instance();");
-    gROOT->ProcessLine("PHG4Reco *g4 = (PHG4Reco *) se->getSubsysReco(\"PHG4RECO\");");
-
+    if (detectorSettings.find("viewer") != std::string::npos){
+      gROOT->ProcessLine("PHG4Reco *g4 = QTGui();"); // alternative to DisplayOn
+    } else {
+      DisplayOn();
+      gROOT->ProcessLine("Fun4AllServer *se = Fun4AllServer::instance();");
+      gROOT->ProcessLine("PHG4Reco *g4 = (PHG4Reco *) se->getSubsysReco(\"PHG4RECO\");");
+    }
     cout << "-------------------------------------------------" << endl;
     cout << "You are in event display mode. Run one event with" << endl;
     cout << "se->run(1)" << endl;
