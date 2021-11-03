@@ -27,6 +27,7 @@ void Event_Eval(const std::string &filename)
   EventEvaluatorEIC *eval = new EventEvaluatorEIC("EVENTEVALUATOR", filename);
   eval->set_reco_tracing_energy_thresholdMC(EVENT_EVALUATOR::EnergyThreshold);
   eval->Verbosity(EVENT_EVALUATOR::Verbosity);
+  // eval->Verbosity(1);
 
   if (Enable::TRACKING)
   {

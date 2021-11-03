@@ -113,7 +113,7 @@ int Fun4All_G4_EICDetector(
   }
 
   // Use Pythia 8
-  Input::PYTHIA8 = true;
+  // Input::PYTHIA8 = true;
   PYTHIA8::config_file = inputFile;
 
   // Use Pythia 6
@@ -163,19 +163,31 @@ int Fun4All_G4_EICDetector(
   if (Input::SIMPLE){
     if (generatorSettings.Contains("SimplePion"))
       INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi-", 1);
-    else if (generatorSettings.Contains("SimpleKaon"))
+    else if (generatorSettings.Contains("SimpleMultiPion")){
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi-", 4);
+    } else if (generatorSettings.Contains("SimpleKaon"))
       INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("kaon-", 1);
     else if (generatorSettings.Contains("SimpleProton"))
       INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("proton", 1);
     else if (generatorSettings.Contains("SimplePhoton"))
       INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("gamma", 1);
-    else if (generatorSettings.Contains("SimpleNeutron"))
+    else if (generatorSettings.Contains("SimpleMultiPhoton")){
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("gamma", 4);
+    } else if (generatorSettings.Contains("SimpleNeutron"))
       INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("neutron", 1);
+    else if (generatorSettings.Contains("SimpleLambda"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("lambda", 1);
+    else if (generatorSettings.Contains("SimpleK0S"))
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("kaon0S", 1);
     else if (generatorSettings.Contains("SimpleElectron"))
       INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("e-", 1);
-    else if (generatorSettings.Contains("SimplePiZero"))
+    else if (generatorSettings.Contains("SimpleMultiElectron")){
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("e-", 4);
+    } else if (generatorSettings.Contains("SimplePiZero"))
       INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi0", 1);
-    else {
+    else if (generatorSettings.Contains("SimpleMultiPiZero")){
+      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi0", 4);
+    } else {
       std::cout << "You didn't specify which particle you wanted to generate, exiting" << std::endl;
       return 0;
     }
@@ -300,7 +312,7 @@ int Fun4All_G4_EICDetector(
   Enable::DSTOUT = false;
   DstOut::OutputDir = outdir;
   DstOut::OutputFile = outputFile;
-  Enable::DSTOUT_COMPRESS = true;  // Compress DST files
+  Enable::DSTOUT_COMPRESS = false;  // Compress DST files
 
   //Option to convert DST to human command readable TTree for quick poke around the outputs
   // Enable::DSTREADER = true;
@@ -371,76 +383,30 @@ int Fun4All_G4_EICDetector(
   G4TRACKING::PROJECTION_LFHCAL = true;
 
   Enable::BECAL = true;
-  Enable::BECAL_CELL = Enable::BECAL && true;
-  Enable::BECAL_TOWER = Enable::BECAL_CELL && true;
-  Enable::BECAL_CLUSTER = Enable::BECAL_TOWER && true;
-  Enable::BECAL_EVAL = Enable::BECAL_CLUSTER && false;
 
   Enable::HCALIN = true;
-  //  Enable::HCALIN_ABSORBER = true;
-  Enable::HCALIN_CELL = Enable::HCALIN && true;
-  Enable::HCALIN_TOWER = Enable::HCALIN_CELL && true;
-  Enable::HCALIN_CLUSTER = Enable::HCALIN_TOWER && true;
-  Enable::HCALIN_EVAL = Enable::HCALIN_CLUSTER && false;
 
   Enable::MAGNET = true;
 
   Enable::HCALOUT = true;
-  //  Enable::HCALOUT_ABSORBER = true;
-  Enable::HCALOUT_CELL = Enable::HCALOUT && true;
-  Enable::HCALOUT_TOWER = Enable::HCALOUT_CELL && true;
-  Enable::HCALOUT_CLUSTER = Enable::HCALOUT_TOWER && true;
-  Enable::HCALOUT_EVAL = Enable::HCALOUT_CLUSTER && false;
 
   // EICDetector geometry - barrel
   Enable::DIRC = true;
-  Enable::DIRC_RECO = Enable::DIRC && true;
-  // Enable::DIRC_VERBOSITY = 2;
-
   // EICDetector geometry - 'hadron' direction
   Enable::RICH = true;
-  Enable::RICH_RECO = Enable::DIRC && true;
-  // Enable::RICH_VERBOSITY = 2;
-
   // EICDetector geometry - 'electron' direction
   Enable::mRICH = true;
-  Enable::mRICH_RECO = Enable::DIRC && true;
-  // Enable::mRICH_VERBOSITY = 2;
 
   Enable::FEMC = true;
-  //  Enable::FEMC_ABSORBER = true;
-  Enable::FEMC_TOWER = Enable::FEMC && true;
-  Enable::FEMC_CLUSTER = Enable::FEMC_TOWER && true;
-  Enable::FEMC_EVAL = Enable::FEMC_CLUSTER && false;
 
   //Enable::DRCALO = false;
-  Enable::DRCALO_CELL = Enable::DRCALO && true;
-  Enable::DRCALO_TOWER = Enable::DRCALO_CELL && true;
-  Enable::DRCALO_CLUSTER = Enable::DRCALO_TOWER && true;
-  Enable::DRCALO_EVAL = Enable::DRCALO_CLUSTER && false;
   G4TTL::SETTING::optionDR = 1;
 
   Enable::LFHCAL = true;
-  Enable::LFHCAL_ABSORBER = false;
-  Enable::LFHCAL_CELL = Enable::LFHCAL && true;
-  Enable::LFHCAL_TOWER = Enable::LFHCAL_CELL && true;
-  Enable::LFHCAL_CLUSTER = Enable::LFHCAL_TOWER && true;
-  Enable::LFHCAL_EVAL = Enable::LFHCAL_CLUSTER && false;
 
   // EICDetector geometry - 'electron' direction
   Enable::EEMCH = true;
-  Enable::EEMCH_TOWER = Enable::EEMCH && true;
-  Enable::EEMCH_CLUSTER = Enable::EEMCH_TOWER && true;
-  Enable::EEMCH_EVAL = Enable::EEMCH_CLUSTER && false;
-  G4TTL::SETTING::optionEEMCH = Enable::EEMCH && true;
-
   Enable::EHCAL = true;
-  Enable::EHCAL_CELL = Enable::EHCAL && true;
-  Enable::EHCAL_TOWER = Enable::EHCAL_CELL && true;
-  Enable::EHCAL_CLUSTER = Enable::EHCAL_TOWER && true;
-  Enable::EHCAL_EVAL = Enable::EHCAL_CLUSTER && false;
-
-  Enable::FFR_EVAL = Enable::HFARFWD_MAGNETS && Enable::HFARFWD_VIRTUAL_DETECTORS && false;
 
   Enable::PLUGDOOR = false;
 
@@ -469,6 +435,177 @@ int Fun4All_G4_EICDetector(
   // Enable::B0_DISABLE_HITPLANE = true;
   // Enable::B0_FULLHITPLANE = true;
 
+
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // special settings for Calo standalone studies
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // deactivate all respective detector systems for standalone studies
+  if(detectorSettings.find("STANDALONE")!= std::string::npos){
+    Enable::PIPE = false;
+    G4PIPE::use_forward_pipes = false;
+    Enable::HFARFWD_MAGNETS = false;
+    Enable::HFARFWD_VIRTUAL_DETECTORS = false;
+    // Enable::TPC_ENDCAP = false;
+    // G4TRACKING::PROJECTION_CEMC   = false;
+    // G4TRACKING::PROJECTION_FEMC   = false;
+    // G4TRACKING::PROJECTION_FHCAL  = false;
+    // G4TRACKING::PROJECTION_EHCAL  = false;
+    // G4TRACKING::PROJECTION_DRCALO = false;
+    // G4TRACKING::PROJECTION_EEMC   = false;
+    Enable::MAGNET = false;
+    Enable::DIRC = false;
+    Enable::RICH = false;
+    Enable::mRICH = false;
+    // Enable::AEROGEL = false;
+    Enable::CEMC = false;
+    Enable::HCALOUT = false;
+    Enable::HCALIN = false;
+    Enable::EHCAL = false;
+    Enable::EEMC = false;
+    Enable::EEMCH = false;
+    Enable::FEMC = false;
+    Enable::FHCAL = false;
+    Enable::LFHCAL = false;
+    Enable::BECAL = false;
+    Enable::FTTL = false;
+    Enable::CTTL = false;
+    Enable::ETTL = false;
+    Enable::EEMCH = false;
+    Enable::RWELL = false;
+    Enable::TrackingService = false;
+    Enable::BARREL = false;
+    Enable::FST = false;
+    Enable::EGEM = false;
+    Enable::FGEM = false;
+    if(detectorSettings.find("PIPE")!= std::string::npos ){
+      Enable::PIPE = true;
+      G4PIPE::use_forward_pipes = true;
+    }
+    if(detectorSettings.find("Magnet")!= std::string::npos )
+      Enable::MAGNET = true;
+    if(detectorSettings.find("dRICH")!= std::string::npos )
+      Enable::RICH = true;
+    // if(detectorSettings.find("ALLSILICON")!= std::string::npos )
+    //   Enable::ALLSILICON = true;
+    if(detectorSettings.find("CEMC")!= std::string::npos )
+      Enable::CEMC = true;
+    if(detectorSettings.find("HCALINOUT")!= std::string::npos ){
+      Enable::HCALOUT = true;
+      Enable::HCALIN = true;
+    }
+    if(detectorSettings.find("DR")!= std::string::npos )
+      Enable::DRCALO = true;
+    if(detectorSettings.find("FEMC")!= std::string::npos )
+      Enable::FEMC = true;
+    if((detectorSettings.find("FHCAL")!= std::string::npos) && !(detectorSettings.find("LFHCAL")!= std::string::npos) )
+      Enable::FHCAL = true;
+    if(detectorSettings.find("LFHCAL")!= std::string::npos )
+      Enable::LFHCAL = true;
+    if(detectorSettings.find("BECAL")!= std::string::npos )
+      Enable::BECAL = true;
+    if(detectorSettings.find("EHCAL")!= std::string::npos )
+      Enable::EHCAL = true;
+    if(detectorSettings.find("EEMCH")!= std::string::npos )
+      Enable::EEMCH = true;
+    if(detectorSettings.find("CHCAL")!= std::string::npos ){
+      Enable::HCALIN   = true;
+      Enable::HCALOUT  = true;
+    }
+    if(detectorSettings.find("DIRC")!= std::string::npos )
+      Enable::DIRC = true;
+    if(detectorSettings.find("SUPPORT")!= std::string::npos ){
+      Enable::TrackingService = true;
+      Enable::TrackingService_OVERLAPCHECK = true;
+    }
+    if(detectorSettings.find("FWDCALO")!= std::string::npos ){
+      Enable::FEMC    = true;
+      Enable::FHCAL   = true;
+    }
+    if(detectorSettings.find("FWDLCALO")!= std::string::npos ){
+      Enable::FEMC    = true;
+      Enable::LFHCAL  = true;
+    }
+    if(detectorSettings.find("BARCALO")!= std::string::npos ){
+      Enable::BECAL    = true;
+      Enable::HCALIN   = true;
+      Enable::HCALOUT  = true;
+      Enable::MAGNET = true;
+    }
+    if(detectorSettings.find("BCKCALO")!= std::string::npos ){
+      Enable::EHCAL    = true;
+      Enable::EEMCH    = true;
+    }
+    if(detectorSettings.find("TTL")!= std::string::npos ){
+      // Enable::PIPE = true;
+      // G4PIPE::use_forward_pipes = true;
+      // LGAD layers
+      if(detectorSettings.find("FTTL")!= std::string::npos )
+        Enable::FTTL = true;
+      if(detectorSettings.find("ETTL")!= std::string::npos ){
+        Enable::ETTL = true;
+        // G4DIRC::SETTING::USECEMCGeo   = false;
+        G4TTL::SETTING::optionCEMC    = false;
+      }
+      if(detectorSettings.find("CTTL")!= std::string::npos ){
+        Enable::CTTL = true;
+        // Enable::DIRC = true;
+        // Enable::CEMC = true;
+        // Enable::BECAL = true;
+        // Enable::ALLSILICON = true;
+        // G4DIRC::SETTING::USECEMCGeo   = false;
+        G4TTL::SETTING::optionCEMC    = false;
+      }
+    }
+  }
+
+
+  Enable::BECAL_CELL = Enable::BECAL && true;
+  Enable::BECAL_TOWER = Enable::BECAL_CELL && true;
+  Enable::BECAL_CLUSTER = Enable::BECAL_TOWER && true;
+  Enable::BECAL_EVAL = Enable::BECAL_CLUSTER && false;
+
+  Enable::HCALIN_CELL = Enable::HCALIN && true;
+  Enable::HCALIN_TOWER = Enable::HCALIN_CELL && true;
+  Enable::HCALIN_CLUSTER = Enable::HCALIN_TOWER && true;
+  Enable::HCALIN_EVAL = Enable::HCALIN_CLUSTER && false;
+
+  Enable::HCALOUT_CELL = Enable::HCALOUT && true;
+  Enable::HCALOUT_TOWER = Enable::HCALOUT_CELL && true;
+  Enable::HCALOUT_CLUSTER = Enable::HCALOUT_TOWER && true;
+  Enable::HCALOUT_EVAL = Enable::HCALOUT_CLUSTER && false;
+
+  Enable::DIRC_RECO = Enable::DIRC && true;
+  Enable::RICH_RECO = Enable::DIRC && true;
+  Enable::mRICH_RECO = Enable::DIRC && true;
+
+  Enable::FEMC_TOWER = Enable::FEMC && true;
+  Enable::FEMC_CLUSTER = Enable::FEMC_TOWER && true;
+  Enable::FEMC_EVAL = Enable::FEMC_CLUSTER && false;
+
+  Enable::DRCALO_CELL = Enable::DRCALO && true;
+  Enable::DRCALO_TOWER = Enable::DRCALO_CELL && true;
+  Enable::DRCALO_CLUSTER = Enable::DRCALO_TOWER && true;
+  Enable::DRCALO_EVAL = Enable::DRCALO_CLUSTER && false;
+
+  Enable::LFHCAL_ABSORBER = false;
+  Enable::LFHCAL_CELL = Enable::LFHCAL && true;
+  Enable::LFHCAL_TOWER = Enable::LFHCAL_CELL && true;
+  Enable::LFHCAL_CLUSTER = Enable::LFHCAL_TOWER && true;
+  Enable::LFHCAL_EVAL = Enable::LFHCAL_CLUSTER && false;
+
+  Enable::EEMCH_TOWER = Enable::EEMCH && true;
+  Enable::EEMCH_CLUSTER = Enable::EEMCH_TOWER && true;
+  Enable::EEMCH_EVAL = Enable::EEMCH_CLUSTER && false;
+  G4TTL::SETTING::optionEEMCH = Enable::EEMCH && true;
+
+  Enable::EHCAL_CELL = Enable::EHCAL && true;
+  Enable::EHCAL_TOWER = Enable::EHCAL_CELL && true;
+  Enable::EHCAL_CLUSTER = Enable::EHCAL_TOWER && true;
+  Enable::EHCAL_EVAL = Enable::EHCAL_CLUSTER && false;
+
+  Enable::FFR_EVAL = Enable::HFARFWD_MAGNETS && Enable::HFARFWD_VIRTUAL_DETECTORS && false;
+
   // Enabling the event evaluator?
   Enable::EVENT_EVAL = true;
   if (detectorSettings.find("HITS") != std::string::npos) {
@@ -484,8 +621,8 @@ int Fun4All_G4_EICDetector(
   //---------------
   //  G4WORLD::PhysicsList = "FTFP_BERT"; //FTFP_BERT_HP best for calo
   //  G4WORLD::WorldMaterial = "G4_AIR"; // set to G4_GALACTIC for material scans
-
-  //---------------
+    //  G4WORLD::WorldMaterial = "G4_Galactic"; // set to G4_GALACTIC for material scans
+  // ---------------
   // Magnet Settings
   //---------------
 

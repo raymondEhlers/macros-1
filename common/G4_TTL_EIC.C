@@ -89,13 +89,15 @@ void TTL_Init()
 
   if (G4TTL::SETTING::optionGeo == 1){
     cout << "TTL setup infront of ECals with 2 layers fwd/bwd & 1 layer barrel" << endl;
-  } else if (G4TTL::SETTING::optionGeo == 2){
+  }
+  if (G4TTL::SETTING::optionGeo == 2){
     cout << "TTL setup infront of ECals with 2 layers fwd/bwd & 1 layer barrel, lower barrel layer" << endl;
     G4TTL::positionToVtx[1][0] = 50.;
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::positionToVtx[1][0] = 65.;
     G4TTL::minExtension[1][0]  = 100.;
     G4TTL::maxExtension[1][0]  = 0.;
-  } else if (G4TTL::SETTING::optionGeo == 3 || G4TTL::SETTING::optionGeo == 5 || G4TTL::SETTING::optionGeo == 6){
+  }
+  if (G4TTL::SETTING::optionGeo == 3 || G4TTL::SETTING::optionGeo == 5 || G4TTL::SETTING::optionGeo == 6){
     cout << "TTL setup infront of ECals with 1 layers fwd/bwd & 1 layer barrel, lower barrel layer" << endl;
     G4TTL::positionToVtx[1][0] = 50.;
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::positionToVtx[1][0] = 65.;
@@ -109,35 +111,44 @@ void TTL_Init()
     G4TTL::minExtension[2][0]  = G4TTL::minExtension[2][1];
     G4TTL::maxExtension[0][0]  = G4TTL::maxExtension[0][1];
     G4TTL::maxExtension[2][0]  = G4TTL::maxExtension[2][1];
-  } else if (G4TTL::SETTING::optionGeo == 4){
+  }
+  if (G4TTL::SETTING::optionGeo == 4){
     cout << "TTL setup infront of ECals  with 2 layers fwd/bwd & 1 layer barrel, 1 layer before HCals everywhere" << endl;
     G4TTL::layer[0]    = 3;
     G4TTL::layer[1]    = 2;
     if(!G4TTL::SETTING::optionBasicGeo) G4TTL::layer[1]    = 1;
     G4TTL::layer[2]    = 3;
-  } else if (G4TTL::SETTING::optionGeo == 5){
+  }
+  if (G4TTL::SETTING::optionGeo == 5){
     // Option 5 is 1 layer fwd/bwd, with LYSO in the central barrel. We use the geometry for option 3 since it's the same.
     // However, we create a separate option to simplify setting up the configuration.
     cout << "TTL setup using LYSO in central barrel" << endl;
     G4TTL::SETTING::optionLYSO = true;
-  } else if (G4TTL::SETTING::optionGeo == 6){
-    cout << "TTL setup with position reslution of 55e-4" << endl;
-    G4TTL::PositionResolution = 55e-4;
-  } else if(G4TTL::SETTING::optionGeo == 7){
-    cout << "TTL one forward disk in front of dRICH and two in front of FEMC with radius of 60cm" << endl;
-    G4TTL::layer[2]            = 3;
-    // disk in front of dRICH (full eta)
+  }
+  if(G4TTL::SETTING::optionGeo == 7){
+    cout << "TTL one forward disk in front of dRICH and one backward disk in front of EEMC, barrel CTTL center at radius 64cm" << endl;
+    // single disk in front of dRICH (full eta)
+    G4TTL::layer[2]            = 1;
     G4TTL::minExtension[2][0] = 7.0;
     G4TTL::maxExtension[2][0] = 87;
     G4TTL::positionToVtx[2][0] = 182.;
     G4TTL::xoffsetFTTLIP6[0] = -2.7;
     G4TTL::xoffsetFTTLIP8[0] = 3.0;
-    // disks in front of FEMC (only high eta)
-    G4TTL::maxExtension[2][1] = 60.;
-    G4TTL::maxExtension[2][2] = 60.;
-    G4TTL::positionToVtx[2][1] = 287.;
-    G4TTL::positionToVtx[2][2] = 289.;
-  } else if(G4TTL::SETTING::optionGeo == 8){
+
+    // single disk in front of EEMC
+    G4TTL::layer[0]            = 1;
+    // G4TTL::minExtension[0][0] = 7.0;
+    // G4TTL::maxExtension[0][0] = 87;
+    // G4TTL::positionToVtx[0][0] = 182.;
+    // G4TTL::xoffsetFTTLIP6[0] = -2.7;
+    // G4TTL::xoffsetFTTLIP8[0] = 3.0;
+
+    // barrel layer at 64cm
+    G4TTL::positionToVtx[1][0] = 64.;
+    G4TTL::minExtension[1][0] = 140;
+    G4TTL::maxExtension[1][0] = 0;
+  }
+  if(G4TTL::SETTING::optionGeo == 8){
     cout << "TTL forward disk 1 reduced in radius to 60cm" << endl;
     G4TTL::maxExtension[2][0] = 60.;
   }
