@@ -364,9 +364,9 @@ int Fun4All_G4_EICDetector(
 
   // gems
   Enable::EGEM = true;
-  Enable::FGEM = true;
+  Enable::FGEM = false;
   if(G4TTL::SETTING::optionGeo == 7)
-    Enable::FGEM = false;
+    Enable::FGEM = true;
   // Enable::BGEM = true; // not yet defined in this model
 
   Enable::TRACKING = true;
@@ -498,6 +498,8 @@ int Fun4All_G4_EICDetector(
       Enable::DRCALO = true;
     if(detectorSettings.find("FEMC")!= std::string::npos )
       Enable::FEMC = true;
+    if(detectorSettings.find("FGEM")!= std::string::npos )
+      Enable::FGEM = true;
     if((detectorSettings.find("FHCAL")!= std::string::npos) && !(detectorSettings.find("LFHCAL")!= std::string::npos) )
       Enable::FHCAL = true;
     if(detectorSettings.find("LFHCAL")!= std::string::npos )

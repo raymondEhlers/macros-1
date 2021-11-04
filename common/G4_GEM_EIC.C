@@ -54,7 +54,8 @@ void EGEMSetup(PHG4Reco *g4Reco)
 
 void FGEMSetup(PHG4Reco *g4Reco, const int N_Sector = 8)
 {
-  make_GEM_station("FGEM_0", g4Reco, 160.0, 1.65, 3.5, N_Sector);
+  // make_GEM_station("FGEM_0", g4Reco, 160.0, 1.65, 3.5, N_Sector);
+  make_GEM_station("FGEM_0", g4Reco, 287., 1.2, 3.8, N_Sector);
   //  make_GEM_station("FGEM_1", g4Reco, 285.0, 1.2, 3.5, N_Sector);// replaced by LGAD-TTL
 }
 

@@ -150,7 +150,15 @@ void TTL_Init()
   }
   if(G4TTL::SETTING::optionGeo == 8){
     cout << "TTL forward disk 1 reduced in radius to 60cm" << endl;
+    G4TTL::layer[2]            = 2;
     G4TTL::maxExtension[2][0] = 60.;
+    G4TTL::maxExtension[2][1] = 60.;
+
+    G4TTL::layer[0]            = 1;
+
+    G4TTL::positionToVtx[1][0] = 64.;
+    G4TTL::minExtension[1][0] = 140;
+    G4TTL::maxExtension[1][0] = 0;
   }
 
   if (G4TTL::SETTING::optionDR == 2 && G4TTL::SETTING::optionGeo == 4 ){
