@@ -165,21 +165,21 @@ int Fun4All_G4_EICDetector(
         for(int igen=0;igen<Input::SIMPLE_NUMBER;igen++){
           if (generatorSettings.Contains("Pion"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("pi-", 1);
-          else if (generatorSettings.Contains("SimpleKaon"))
+          else if (generatorSettings.Contains("Kaon"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("kaon-", 1);
-          else if (generatorSettings.Contains("SimpleProton"))
+          else if (generatorSettings.Contains("Proton"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("proton", 1);
-          else if (generatorSettings.Contains("SimplePhoton"))
+          else if (generatorSettings.Contains("Photon"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("gamma", 1);
-          else if (generatorSettings.Contains("SimpleNeutron"))
+          else if (generatorSettings.Contains("Neutron"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("neutron", 1);
-          else if (generatorSettings.Contains("SimpleLambda"))
+          else if (generatorSettings.Contains("Lambda"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("lambda", 1);
-          else if (generatorSettings.Contains("SimpleK0S"))
+          else if (generatorSettings.Contains("K0S"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("kaon0S", 1);
-          else if (generatorSettings.Contains("SimpleElectron"))
+          else if (generatorSettings.Contains("Electron"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("e-", 1);
-          else if (generatorSettings.Contains("SimplePiZero"))
+          else if (generatorSettings.Contains("PiZero"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("pi0", 1);
           else {
             std::cout << "You didn't specify which particle you wanted to generate, exiting" << std::endl;
@@ -191,11 +191,11 @@ int Fun4All_G4_EICDetector(
           INPUTGENERATOR::SimpleEventGenerator[igen]->set_vertex_distribution_mean(0., 0., 0.);
           INPUTGENERATOR::SimpleEventGenerator[igen]->set_vertex_distribution_width(0., 0., 0.);
           if (igen==0)
-            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-1.8, 1.2);
+            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-1.7, 1.2);
           else if (igen==1)
             INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-4, -1.7);
           else if (igen==2)
-            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(1.1, 4.0);
+            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(1.2, 4.0);
           else
             INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-4.0, 4.0);
           INPUTGENERATOR::SimpleEventGenerator[igen]->set_phi_range(-M_PI, M_PI);
