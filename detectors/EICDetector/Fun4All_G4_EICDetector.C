@@ -110,6 +110,8 @@ int Fun4All_G4_EICDetector(
   if (particlemomMin>-1 && particlemomMax>-1){
     Input::SIMPLE = true;
     Input::SIMPLE_VERBOSITY = 0;
+    if (generatorSettings.Contains("Multi"))
+      Input::SIMPLE_NUMBER = 3; // if you need 2 of them
   }
 
   // Use Pythia 8
@@ -124,8 +126,6 @@ int Fun4All_G4_EICDetector(
 
   // Simple multi particle generator in eta/phi/pt ranges
   //Input::SIMPLE = true;
-  // Input::SIMPLE_NUMBER = 2; // if you need 2 of them
-  // Input::SIMPLE_VERBOSITY = 1;
 
   // Particle gun (same particles in always the same direction)
   // Input::GUN = true;
@@ -161,51 +161,85 @@ int Fun4All_G4_EICDetector(
   // if you run more than one of these Input::SIMPLE_NUMBER > 1
   // add the settings for other with [1], next with [2]...
   if (Input::SIMPLE){
-    if (generatorSettings.Contains("SimplePion"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi-", 1);
-    else if (generatorSettings.Contains("SimpleMultiPion")){
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi-", 4);
-    } else if (generatorSettings.Contains("SimpleKaon"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("kaon-", 1);
-    else if (generatorSettings.Contains("SimpleProton"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("proton", 1);
-    else if (generatorSettings.Contains("SimplePhoton"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("gamma", 1);
-    else if (generatorSettings.Contains("SimpleMultiPhoton")){
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("gamma", 4);
-    } else if (generatorSettings.Contains("SimpleNeutron"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("neutron", 1);
-    else if (generatorSettings.Contains("SimpleLambda"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("lambda", 1);
-    else if (generatorSettings.Contains("SimpleK0S"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("kaon0S", 1);
-    else if (generatorSettings.Contains("SimpleElectron"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("e-", 1);
-    else if (generatorSettings.Contains("SimpleMultiElectron")){
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("e-", 4);
-    } else if (generatorSettings.Contains("SimplePiZero"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi0", 1);
-    else if (generatorSettings.Contains("SimpleMultiPiZero")){
-      INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi0", 4);
+      if (generatorSettings.Contains("Multi")){
+        for(int igen=0;igen<Input::SIMPLE_NUMBER;igen++){
+          if (generatorSettings.Contains("Pion"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("pi-", 1);
+          else if (generatorSettings.Contains("SimpleKaon"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("kaon-", 1);
+          else if (generatorSettings.Contains("SimpleProton"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("proton", 1);
+          else if (generatorSettings.Contains("SimplePhoton"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("gamma", 1);
+          else if (generatorSettings.Contains("SimpleNeutron"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("neutron", 1);
+          else if (generatorSettings.Contains("SimpleLambda"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("lambda", 1);
+          else if (generatorSettings.Contains("SimpleK0S"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("kaon0S", 1);
+          else if (generatorSettings.Contains("SimpleElectron"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("e-", 1);
+          else if (generatorSettings.Contains("SimplePiZero"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("pi0", 1);
+          else {
+            std::cout << "You didn't specify which particle you wanted to generate, exiting" << std::endl;
+            return 0;
+          }
+          INPUTGENERATOR::SimpleEventGenerator[igen]->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
+                                                                                    PHG4SimpleEventGenerator::Uniform,
+                                                                                    PHG4SimpleEventGenerator::Uniform);
+          INPUTGENERATOR::SimpleEventGenerator[igen]->set_vertex_distribution_mean(0., 0., 0.);
+          INPUTGENERATOR::SimpleEventGenerator[igen]->set_vertex_distribution_width(0., 0., 0.);
+          if (igen==0)
+            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-1.8, 1.2);
+          else if (igen==1)
+            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-4, -1.7);
+          else if (igen==2)
+            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(1.1, 4.0);
+          else
+            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-4.0, 4.0);
+          INPUTGENERATOR::SimpleEventGenerator[igen]->set_phi_range(-M_PI, M_PI);
+          INPUTGENERATOR::SimpleEventGenerator[igen]->set_p_range(particlemomMin, particlemomMax);
+        }
     } else {
-      std::cout << "You didn't specify which particle you wanted to generate, exiting" << std::endl;
-      return 0;
+      if (generatorSettings.Contains("SimplePion"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi-", 1);
+      else if (generatorSettings.Contains("SimpleKaon"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("kaon-", 1);
+      else if (generatorSettings.Contains("SimpleProton"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("proton", 1);
+      else if (generatorSettings.Contains("SimplePhoton"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("gamma", 1);
+      else if (generatorSettings.Contains("SimpleNeutron"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("neutron", 1);
+      else if (generatorSettings.Contains("SimpleLambda"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("lambda", 1);
+      else if (generatorSettings.Contains("SimpleK0S"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("kaon0S", 1);
+      else if (generatorSettings.Contains("SimpleElectron"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("e-", 1);
+      else if (generatorSettings.Contains("SimplePiZero"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi0", 1);
+      else {
+        std::cout << "You didn't specify which particle you wanted to generate, exiting" << std::endl;
+        return 0;
+      }
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
+                                                                                PHG4SimpleEventGenerator::Uniform,
+                                                                                PHG4SimpleEventGenerator::Uniform);
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_mean(0., 0., 0.);
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_width(0., 0., 5.);
+      if (generatorSettings.Contains("central"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-1.8, 1.2);
+      else if (generatorSettings.Contains("bck"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4, -1.7);
+      else if (generatorSettings.Contains("fwd"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(1.1, 4.0);
+      else
+        INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4.0, 4.0);
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_phi_range(-M_PI, M_PI);
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_p_range(particlemomMin, particlemomMax);
     }
-    INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_function(PHG4SimpleEventGenerator::Uniform,
-                                                                              PHG4SimpleEventGenerator::Uniform,
-                                                                              PHG4SimpleEventGenerator::Uniform);
-    INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_mean(0., 0., 0.);
-    INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_width(0., 0., 5.);
-    if (generatorSettings.Contains("central"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-1.8, 1.2);
-    else if (generatorSettings.Contains("bck"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4, -1.7);
-    else if (generatorSettings.Contains("fwd"))
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(1.1, 4.0);
-    else
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4.0, 4.0);
-    INPUTGENERATOR::SimpleEventGenerator[0]->set_phi_range(-M_PI, M_PI);
-    INPUTGENERATOR::SimpleEventGenerator[0]->set_p_range(particlemomMin, particlemomMax);
   }
   if(particlemomMin>-1 && particlemomMax == -1){
     PHG4ParticleGenerator *gen = new PHG4ParticleGenerator("PGENERATOR");
@@ -334,11 +368,11 @@ int Fun4All_G4_EICDetector(
   // If need to disable EIC beam pipe extension beyond the Be-section:
   G4PIPE::use_forward_pipes = true;
   //EIC hadron far forward magnets and detectors. IP6 and IP8 are incompatible (pick either or);
-  Enable::HFARFWD_MAGNETS = true;
-  Enable::HFARFWD_VIRTUAL_DETECTORS = true;
+  // Enable::HFARFWD_MAGNETS = true;
+  // Enable::HFARFWD_VIRTUAL_DETECTORS = true;
 
-  Enable::HFARBWD_MAGNETS = true;
-  Enable::HFARBWD_VIRTUAL_DETECTORS = true;
+  // Enable::HFARBWD_MAGNETS = true;
+  // Enable::HFARBWD_VIRTUAL_DETECTORS = true;
 
   Enable::RWELL = true;
   // barrel tracker
@@ -377,6 +411,7 @@ int Fun4All_G4_EICDetector(
   G4TRACKING::PROJECTION_BECAL = true;
   G4TRACKING::PROJECTION_EHCAL = true;
   G4TRACKING::PROJECTION_CEMC = true;
+  G4TRACKING::PROJECTION_HCALIN = true;
   G4TRACKING::PROJECTION_HCALOUT = true;
   G4TRACKING::PROJECTION_FEMC = true;
   G4TRACKING::PROJECTION_FHCAL = true;
@@ -510,6 +545,8 @@ int Fun4All_G4_EICDetector(
       Enable::EHCAL = true;
     if(detectorSettings.find("EEMCH")!= std::string::npos )
       Enable::EEMCH = true;
+    if(detectorSettings.find("RWELL")!= std::string::npos )
+      Enable::RWELL = true;
     if(detectorSettings.find("CHCAL")!= std::string::npos ){
       Enable::HCALIN   = true;
       Enable::HCALOUT  = true;

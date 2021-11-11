@@ -149,10 +149,18 @@ void TTL_Init()
     G4TTL::maxExtension[1][0] = 0;
   }
   if(G4TTL::SETTING::optionGeo == 8){
-    cout << "TTL forward disk 1 reduced in radius to 60cm" << endl;
-    G4TTL::layer[2]            = 2;
-    G4TTL::maxExtension[2][0] = 60.;
+    G4TTL::layer[2]            = 3;
+    cout << "TTL forward disk 1 in front of dRICH" << endl;
+    G4TTL::minExtension[2][0] = 7.0;
+    G4TTL::maxExtension[2][0] = 87;
+    G4TTL::positionToVtx[2][0] = 182.;
+    cout << "additional two small TTL disks in front of FEMC" << endl;
+    G4TTL::minExtension[2][1] = 11.62;
+    G4TTL::minExtension[2][2] = 11.7;
     G4TTL::maxExtension[2][1] = 60.;
+    G4TTL::maxExtension[2][2] = 60.;
+    G4TTL::positionToVtx[2][1] = 287.;
+    G4TTL::positionToVtx[2][2] = 289.;
 
     G4TTL::layer[0]            = 1;
 
@@ -237,8 +245,9 @@ int make_forward_station(string name, PHG4Reco *g4Reco,
 
   // always facing the interaction point
   double polar_angle = 0;
-  if (zpos < 0){
-    zpos = -zpos;
+  double place_z(zpos);
+  if (place_z < 0){
+    place_z = -place_z;
     polar_angle = M_PI;
   }
   PHG4TTLSubsystem *ttl;
@@ -247,12 +256,12 @@ int make_forward_station(string name, PHG4Reco *g4Reco,
   ttl->SuperDetector(name);
   ttl->set_double_param("polar_angle", polar_angle);                    //
   ttl->set_int_param("isForward", 1);                    //
-  ttl->set_double_param("place_z", zpos * cm);                    //
+  ttl->set_double_param("place_z", place_z * cm);                    //
   ttl->set_double_param("rMin", rMin * cm);                    //
   ttl->set_double_param("rMax", rMax * cm);                    //
   ttl->set_double_param("offset_x", xoffset * cm);                    //
   ttl->set_double_param("tSilicon", tSilicon);                    //
-//   ttl->OverlapCheck(true);
+  // ttl->OverlapCheck(true);
   ttl->OverlapCheck(Enable::OVERLAPCHECK);
 
   g4Reco->registerSubsystem(ttl);
@@ -373,6 +382,7 @@ int make_barrel_layer(string name, PHG4Reco *g4Reco,
   ttl->set_double_param("length", 2.0 * halflength * cm);
   ttl->set_double_param("tSilicon", tSilicon);                    //
   ttl->OverlapCheck(Enable::OVERLAPCHECK);
+  // ttl->OverlapCheck(true);
 
   g4Reco->registerSubsystem(ttl);
 
