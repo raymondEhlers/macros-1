@@ -397,10 +397,10 @@ int Fun4All_G4_EICDetector(
   }
 
   // gems
-  Enable::EGEM = true;
+  Enable::EGEM = false;
   Enable::FGEM = false;
-  if(G4TTL::SETTING::optionGeo == 7)
-    Enable::FGEM = true;
+  // if(G4TTL::SETTING::optionGeo == 7)
+    // Enable::FGEM = true;
   // Enable::BGEM = true; // not yet defined in this model
 
   Enable::TRACKING = true;
