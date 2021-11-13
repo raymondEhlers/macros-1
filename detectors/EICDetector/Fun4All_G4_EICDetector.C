@@ -455,6 +455,7 @@ int Fun4All_G4_EICDetector(
 
   // new settings using Enable namespace in GlobalVariables.C
   Enable::BLACKHOLE = true;
+  bool BLACKHOLE_SAVEHITS = false;
   if(detectorSettings.find("BHH")!= std::string::npos ){
     Enable::BLACKHOLE_SAVEHITS = true; // turn off saving of bh hits
   }
