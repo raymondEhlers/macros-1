@@ -54,6 +54,7 @@ void Event_Eval(const std::string &filename)
   if (Enable::DRCALO) eval->set_do_DRCALO(true);
   if (Enable::LFHCAL) eval->set_do_LFHCAL(true);
   if (Enable::BECAL) eval->set_do_BECAL(true);
+  if (Enable::BLACKHOLE_SAVEHITS) eval->set_do_BLACKHOLE(true);
 
   eval->set_do_MCPARTICLES(true);
   eval->set_do_GEOMETRY(true);

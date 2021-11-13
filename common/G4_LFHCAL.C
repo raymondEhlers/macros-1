@@ -43,7 +43,7 @@ namespace G4LFHCAL
   // from LFHcal/mapping/towerMap_LFHCAL_v005.txt
   double Gz0 = 400.;
   double Gdz = 100.;
-  double outer_radius = 262.;
+  double outer_radius = 265.;
   enum enu_FHcal_clusterizer
   {
     kFHcalGraphClusterizer,

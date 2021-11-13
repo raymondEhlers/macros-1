@@ -234,7 +234,7 @@ int Fun4All_G4_EICDetector(
       else if (generatorSettings.Contains("bck"))
         INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4, -1.7);
       else if (generatorSettings.Contains("fwd"))
-        INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(1.1, 4.0);
+        INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(1.2, 4.0);
       else
         INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4.0, 4.0);
       INPUTGENERATOR::SimpleEventGenerator[0]->set_phi_range(-M_PI, M_PI);
@@ -455,8 +455,10 @@ int Fun4All_G4_EICDetector(
 
   // new settings using Enable namespace in GlobalVariables.C
   Enable::BLACKHOLE = true;
-  //Enable::BLACKHOLE_SAVEHITS = false; // turn off saving of bh hits
-  //BlackHoleGeometry::visible = true;
+  if(detectorSettings.find("BHH")!= std::string::npos ){
+    Enable::BLACKHOLE_SAVEHITS = true; // turn off saving of bh hits
+  }
+  // BlackHoleGeometry::visible = true;
   
   // ZDC
   // Enable::ZDC = true;
