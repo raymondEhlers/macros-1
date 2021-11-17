@@ -118,6 +118,7 @@ int make_GEM_station(string name, PHG4Reco *g4Reco, double zpos, double etamin,
   //      << name << endl;
 
   double polar_angle = 0;
+  double place_z(zpos);
 
   if (doTilt)
   {
@@ -127,7 +128,7 @@ int make_GEM_station(string name, PHG4Reco *g4Reco, double zpos, double etamin,
   {
     if (zpos < 0)
     {
-      zpos = -zpos;
+      place_z = -place_z;
       polar_angle = M_PI;
     }
   }
@@ -146,12 +147,12 @@ int make_GEM_station(string name, PHG4Reco *g4Reco, double zpos, double etamin,
   if (doTilt)
   {
     gem->get_geometry().set_normal_polar_angle((PHG4Sector::Sector_Geometry::eta_to_polar_angle(etamin) + PHG4Sector::Sector_Geometry::eta_to_polar_angle(etamax)) / 2);
-    gem->get_geometry().set_normal_start(zpos * PHG4Sector::Sector_Geometry::Unit_cm(), PHG4Sector::Sector_Geometry::eta_to_polar_angle(etamax));
+    gem->get_geometry().set_normal_start(place_z * PHG4Sector::Sector_Geometry::Unit_cm(), PHG4Sector::Sector_Geometry::eta_to_polar_angle(etamax));
   }
   else
   {
     gem->get_geometry().set_normal_polar_angle(polar_angle);
-    gem->get_geometry().set_normal_start(zpos * PHG4Sector::Sector_Geometry::Unit_cm());
+    gem->get_geometry().set_normal_start(place_z * PHG4Sector::Sector_Geometry::Unit_cm());
   }
   gem->get_geometry().set_min_polar_angle(PHG4Sector::Sector_Geometry::eta_to_polar_angle(etamax));
   gem->get_geometry().set_max_polar_angle(PHG4Sector::Sector_Geometry::eta_to_polar_angle(etamin));

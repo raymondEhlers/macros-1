@@ -89,9 +89,9 @@ int make_LANL_FST_station(string name, PHG4Reco *g4Reco,
 
   // always facing the interaction point
   double polar_angle = 0;
-  if (zpos < 0)
-  {
-    zpos = -zpos;
+  double place_z(zpos);
+  if (place_z < 0){
+    place_z = -place_z;
     polar_angle = M_PI;
   }
   if (max_polar_angle < min_polar_angle)
@@ -106,7 +106,7 @@ int make_LANL_FST_station(string name, PHG4Reco *g4Reco,
   fst->SuperDetector(name);
 
   fst->get_geometry().set_normal_polar_angle(polar_angle);
-  fst->get_geometry().set_normal_start(zpos * PHG4Sector::Sector_Geometry::Unit_cm());
+  fst->get_geometry().set_normal_start(place_z * PHG4Sector::Sector_Geometry::Unit_cm());
   fst->get_geometry().set_min_polar_angle(min_polar_angle);
   fst->get_geometry().set_max_polar_angle(max_polar_angle);
   fst->get_geometry().set_max_polar_edge(PHG4Sector::Sector_Geometry::ConeEdge());
