@@ -163,7 +163,11 @@ int Fun4All_G4_EICDetector(
   if (Input::SIMPLE){
       if (generatorSettings.Contains("Multi")){
         for(int igen=0;igen<Input::SIMPLE_NUMBER;igen++){
-          if (generatorSettings.Contains("Pion"))
+          if (generatorSettings.Contains("PiPrEl")){
+            if(igen==0)INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("pi-", 1);
+            else if(igen==1)INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("e-", 1);
+            else if(igen==2)INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("proton", 1);
+          }else if (generatorSettings.Contains("Pion"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("pi-", 1);
           else if (generatorSettings.Contains("Kaon"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("kaon-", 1);
