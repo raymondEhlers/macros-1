@@ -173,6 +173,8 @@ int Fun4All_G4_EICDetector(
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("kaon-", 1);
           else if (generatorSettings.Contains("Proton"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("proton", 1);
+          else if (generatorSettings.Contains("Muon"))
+            INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("mu-", 1);
           else if (generatorSettings.Contains("Photon"))
             INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("gamma", 1);
           else if (generatorSettings.Contains("Neutron"))
@@ -216,6 +218,8 @@ int Fun4All_G4_EICDetector(
         INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("gamma", 1);
       else if (generatorSettings.Contains("SimpleNeutron"))
         INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("neutron", 1);
+      else if (generatorSettings.Contains("SimpleMuon"))
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("mu-", 1);
       else if (generatorSettings.Contains("SimpleLambda"))
         INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("lambda", 1);
       else if (generatorSettings.Contains("SimpleK0S"))
