@@ -449,6 +449,12 @@ int Fun4All_G4_EICDetector(
 
   // EICDetector geometry - 'electron' direction
   Enable::EEMCH = true;
+  if (detectorSettings.find("EEMAPNC") != std::string::npos) {
+    G4EEMCH::SETTING::USECUSTOMMAPNOCARBON = true;
+  }
+  if (detectorSettings.find("EEMAP30CM") != std::string::npos) {
+    G4EEMCH::SETTING::USECUSTOMMAP30CM = true;
+  }
   Enable::EHCAL = true;
 
   Enable::PLUGDOOR = false;
