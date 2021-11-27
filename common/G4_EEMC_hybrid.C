@@ -80,9 +80,11 @@ namespace G4EEMCH
 
 void EEMCHInit()
 {
-  BlackHoleGeometry::max_radius = std::max(BlackHoleGeometry::max_radius, 77.);
+  BlackHoleGeometry::max_radius = std::max(BlackHoleGeometry::max_radius, 90.);
   // from towerMap_EEMC_v006.txt
   BlackHoleGeometry::min_z = std::min(BlackHoleGeometry::min_z, G4EEMCH::Gz0 - G4EEMCH::Gdz / 2.);
+  BlackHoleGeometry::max_z = std::max(BlackHoleGeometry::max_z, 30.);
+
 }
 
 
