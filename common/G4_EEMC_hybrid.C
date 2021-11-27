@@ -54,6 +54,7 @@ namespace G4EEMCH
     bool USECEMCGeo   = false;
     bool USECUSTOMMAPNOCARBON   = false;
     bool USECUSTOMMAP30CM   = false;
+    bool USECUSTOMMAPCARBON   = false;
   }  // namespace SETTING
   
   // Digitization (default photon digi):
@@ -109,6 +110,8 @@ void EEMCHSetup(PHG4Reco *g4Reco)
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185_noCarbon.txt";
   } else if (G4EEMCH::SETTING::USECUSTOMMAP30CM){
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185_30cm.txt";
+  } else if (G4EEMCH::SETTING::USECUSTOMMAPCARBON){
+    mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185cm_EEEMCcarbon.txt";
   } else if (G4EEMCH::SETTING::USEHYBRID && !G4EEMCH::SETTING::USECEMCGeo)
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_crystal_200cm_SciGlassBarrel.txt";
   else if (G4EEMCH::SETTING::USEHYBRID && G4EEMCH::SETTING::USECEMCGeo)
@@ -174,6 +177,8 @@ void EEMCH_Towers()
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185_noCarbon.txt";
   } else if (G4EEMCH::SETTING::USECUSTOMMAP30CM){
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185_30cm.txt";
+  } else if (G4EEMCH::SETTING::USECUSTOMMAPCARBON){
+    mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185cm_EEEMCcarbon.txt";
   } else if (G4EEMCH::SETTING::USEHYBRID && !G4EEMCH::SETTING::USECEMCGeo)
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_crystal_200cm_SciGlassBarrel.txt";
   else if (G4EEMCH::SETTING::USEHYBRID && G4EEMCH::SETTING::USECEMCGeo)

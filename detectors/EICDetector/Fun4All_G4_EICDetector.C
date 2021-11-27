@@ -455,6 +455,9 @@ int Fun4All_G4_EICDetector(
   if (detectorSettings.find("EEMAP30CM") != std::string::npos) {
     G4EEMCH::SETTING::USECUSTOMMAP30CM = true;
   }
+  if (detectorSettings.find("EEMAPCARBON") != std::string::npos) {
+    G4EEMCH::SETTING::USECUSTOMMAPCARBON = true;
+  }
   Enable::EHCAL = true;
 
   Enable::PLUGDOOR = false;
