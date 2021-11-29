@@ -446,6 +446,9 @@ int Fun4All_G4_EICDetector(
   G4TTL::SETTING::optionDR = 1;
 
   Enable::LFHCAL = true;
+  if (detectorSettings.find("LFTAILC") != std::string::npos) {
+    G4LFHCAL::SETTING::tailcatcher = true;
+  }
 
   // EICDetector geometry - 'electron' direction
   Enable::EEMCH = true;
