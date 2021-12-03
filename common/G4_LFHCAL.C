@@ -62,7 +62,7 @@ namespace G4LFHCAL
     bool FwdSquare = false;
     bool FwdConfig = false;
     bool longer = true;
-    bool tailcatcher = false;
+    bool tailcatcher = true;
   }  // namespace SETTING
 }  // namespace G4LFHCAL
 

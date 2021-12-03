@@ -196,14 +196,27 @@ int Fun4All_G4_EICDetector(
                                                                                     PHG4SimpleEventGenerator::Uniform);
           INPUTGENERATOR::SimpleEventGenerator[igen]->set_vertex_distribution_mean(0., 0., 0.);
           INPUTGENERATOR::SimpleEventGenerator[igen]->set_vertex_distribution_width(0., 0., 0.);
-          if (igen==0)
-            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-1.7, 1.2);
-          else if (igen==1)
-            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-4, -1.7);
-          else if (igen==2)
-            INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(1.2, 4.0);
-          else
+
+          bool strictrange = false;
+          if(generatorSettings.Contains("strict")) strictrange = true;
+          if (igen==0){
+            if(strictrange)
+              INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-0.7, 0.7);
+            else
+              INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-1.7, 1.2);
+          } else if (igen==1) {
+            if(strictrange)
+              INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-3.0, -2.5);
+            else
+              INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-4, -1.7);
+          } else if (igen==2) {
+            if(strictrange)
+              INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(2.5, 3.0);
+            else
+              INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(1.2, 4.0);
+          } else {
             INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-4.0, 4.0);
+          }
           INPUTGENERATOR::SimpleEventGenerator[igen]->set_phi_range(-M_PI, M_PI);
           INPUTGENERATOR::SimpleEventGenerator[igen]->set_p_range(particlemomMin, particlemomMax);
         }
@@ -236,7 +249,7 @@ int Fun4All_G4_EICDetector(
                                                                                 PHG4SimpleEventGenerator::Uniform,
                                                                                 PHG4SimpleEventGenerator::Uniform);
       INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_mean(0., 0., 0.);
-      INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_width(0., 0., 5.);
+      INPUTGENERATOR::SimpleEventGenerator[0]->set_vertex_distribution_width(0., 0., 0.);
       if (generatorSettings.Contains("central"))
         INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-1.8, 1.2);
       else if (generatorSettings.Contains("bck"))
@@ -446,9 +459,6 @@ int Fun4All_G4_EICDetector(
   G4TTL::SETTING::optionDR = 1;
 
   Enable::LFHCAL = true;
-  if (detectorSettings.find("LFTAILC") != std::string::npos) {
-    G4LFHCAL::SETTING::tailcatcher = true;
-  }
 
   // EICDetector geometry - 'electron' direction
   Enable::EEMCH = true;
@@ -460,6 +470,9 @@ int Fun4All_G4_EICDetector(
   }
   if (detectorSettings.find("EEMAPCARBON") != std::string::npos) {
     G4EEMCH::SETTING::USECUSTOMMAPCARBON = true;
+  }
+  if (detectorSettings.find("EEMAPUPDATE") != std::string::npos) {
+    G4EEMCH::SETTING::USECUSTOMMAPUPDATED = true;
   }
   Enable::EHCAL = true;
 
@@ -478,6 +491,7 @@ int Fun4All_G4_EICDetector(
   bool BLACKHOLE_SAVEHITS = false;
   if(detectorSettings.find("BHH")!= std::string::npos ){
     Enable::BLACKHOLE_SAVEHITS = true; // turn off saving of bh hits
+    Enable::EVENT_EVAL_DO_HITS_BLACKHOLE = true; // turn off saving of bh hits
   }
   // BlackHoleGeometry::visible = true;
   
@@ -548,6 +562,12 @@ int Fun4All_G4_EICDetector(
     //   Enable::ALLSILICON = true;
     if(detectorSettings.find("CEMC")!= std::string::npos )
       Enable::CEMC = true;
+    if(detectorSettings.find("HCALOUT")!= std::string::npos ){
+      Enable::HCALOUT = true;
+    }
+    if(detectorSettings.find("HCALIN")!= std::string::npos ){
+      Enable::HCALIN = true;
+    }
     if(detectorSettings.find("HCALINOUT")!= std::string::npos ){
       Enable::HCALOUT = true;
       Enable::HCALIN = true;
@@ -672,6 +692,12 @@ int Fun4All_G4_EICDetector(
   Enable::EVENT_EVAL = true;
   if (detectorSettings.find("HITS") != std::string::npos) {
     Enable::EVENT_EVAL_DO_HITS = true;
+    if (detectorSettings.find("HITSABS") != std::string::npos) {
+      Enable::EVENT_EVAL_DO_HITS_ABSORBER = true;
+    }
+    if (detectorSettings.find("HITSC") != std::string::npos) {
+      Enable::EVENT_EVAL_DO_HITS_CALO = true;
+    }
   }
   // EVENT_EVALUATOR::Verbosity = 1;
   // EVENT_EVALUATOR::EnergyThreshold = 0.05; // GeV
@@ -687,11 +713,15 @@ int Fun4All_G4_EICDetector(
   // ---------------
   // Magnet Settings
   //---------------
-
-  //  const string magfield = "1.5"; // alternatively to specify a constant magnetic field, give a float number, which will be translated to solenoidal field in T, if string use as fieldmap name (including path)
-  //  G4MAGNET::magfield = string(getenv("CALIBRATIONROOT")) + string("/Field/Map/sPHENIX.2d.root");  // default map from the calibration database
-  G4MAGNET::magfield_rescale = -1.4 / 1.5;  // make consistent with expected Babar field strength of 1.4T
-
+  if (detectorSettings.find("NOFIELD") != std::string::npos) {
+    const string magfield = "0.0"; // alternatively to specify a constant magnetic field, give a float number, which will be translated to solenoidal field in T, if string use as fieldmap name (including path)
+    G4MAGNET::magfield = magfield;
+    G4WORLD::WorldMaterial = "G4_Galactic"; // set to G4_GALACTIC for material scans
+  } else {
+    // const string magfield = "1.5"; // alternatively to specify a constant magnetic field, give a float number, which will be translated to solenoidal field in T, if string use as fieldmap name (including path)
+    //  G4MAGNET::magfield = string(getenv("CALIBRATIONROOT")) + string("/Field/Map/sPHENIX.2d.root");  // default map from the calibration database
+    G4MAGNET::magfield_rescale = -1.4 / 1.5;  // make consistent with expected Babar field strength of 1.4T
+  }
   //---------------
   // Pythia Decayer
   //---------------

@@ -55,6 +55,7 @@ namespace G4EEMCH
     bool USECUSTOMMAPNOCARBON   = false;
     bool USECUSTOMMAP30CM   = false;
     bool USECUSTOMMAPCARBON   = false;
+    bool USECUSTOMMAPUPDATED   = false;
   }  // namespace SETTING
   
   // Digitization (default photon digi):
@@ -112,6 +113,8 @@ void EEMCHSetup(PHG4Reco *g4Reco)
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185_30cm.txt";
   } else if (G4EEMCH::SETTING::USECUSTOMMAPCARBON){
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185cm_EEEMCcarbon.txt";
+  } else if (G4EEMCH::SETTING::USECUSTOMMAPUPDATED){
+    mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185cm_updatedGeo.txt";
   } else if (G4EEMCH::SETTING::USEHYBRID && !G4EEMCH::SETTING::USECEMCGeo)
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_crystal_200cm_SciGlassBarrel.txt";
   else if (G4EEMCH::SETTING::USEHYBRID && G4EEMCH::SETTING::USECEMCGeo)
@@ -130,7 +133,7 @@ void EEMCHSetup(PHG4Reco *g4Reco)
   cout << "setting EEMC crystal mapping: " << mapping_eemc_1.str() << endl;
   eemc_crystal->set_string_param("mappingtower", mapping_eemc_1.str());    
   eemc_crystal->OverlapCheck(OverlapCheck);
-//   eemc_crystal->OverlapCheck(true);
+  eemc_crystal->OverlapCheck(true);
   
   g4Reco->registerSubsystem(eemc_crystal);
   
@@ -179,6 +182,8 @@ void EEMCH_Towers()
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185_30cm.txt";
   } else if (G4EEMCH::SETTING::USECUSTOMMAPCARBON){
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185cm_EEEMCcarbon.txt";
+  } else if (G4EEMCH::SETTING::USECUSTOMMAPUPDATED){
+    mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185cm_updatedGeo.txt";
   } else if (G4EEMCH::SETTING::USEHYBRID && !G4EEMCH::SETTING::USECEMCGeo)
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_crystal_200cm_SciGlassBarrel.txt";
   else if (G4EEMCH::SETTING::USEHYBRID && G4EEMCH::SETTING::USECEMCGeo)

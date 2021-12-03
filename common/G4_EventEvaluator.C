@@ -12,6 +12,9 @@ namespace Enable
   // use Enable::EVENT_EVAL = true; in your macro
   bool EVENT_EVAL = false;
   bool EVENT_EVAL_DO_HITS = false;
+  bool EVENT_EVAL_DO_HITS_ABSORBER = false;
+  bool EVENT_EVAL_DO_HITS_CALO = false;
+  bool EVENT_EVAL_DO_HITS_BLACKHOLE = false;
 }  // namespace Enable
 
 namespace EVENT_EVALUATOR
@@ -35,6 +38,15 @@ void Event_Eval(const std::string &filename)
     if (Enable::EVENT_EVAL_DO_HITS) {
       std::cout << "Enabled hits in event eval.\n";
       eval->set_do_HITS(true);
+      if (Enable::EVENT_EVAL_DO_HITS_ABSORBER) {
+        std::cout << "Enabled absorber hits in event eval.\n";
+        eval->set_do_HITS_ABSORBER(true);
+      }
+      if (Enable::EVENT_EVAL_DO_HITS_CALO) {
+        std::cout << "Enabled calorimeter hits in event eval.\n";
+        eval->set_do_HITS_CALO(true);
+      }
+      if (Enable::BLACKHOLE_SAVEHITS && Enable::EVENT_EVAL_DO_HITS_BLACKHOLE) eval->set_do_BLACKHOLE(true);
     }
     eval->set_do_PROJECTIONS(true);
     if (G4TRACKING::DISPLACED_VERTEX)
@@ -54,7 +66,6 @@ void Event_Eval(const std::string &filename)
   if (Enable::DRCALO) eval->set_do_DRCALO(true);
   if (Enable::LFHCAL) eval->set_do_LFHCAL(true);
   if (Enable::BECAL) eval->set_do_BECAL(true);
-  if (Enable::BLACKHOLE_SAVEHITS) eval->set_do_BLACKHOLE(true);
 
   eval->set_do_MCPARTICLES(true);
   eval->set_do_GEOMETRY(true);

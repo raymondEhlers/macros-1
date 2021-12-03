@@ -6,8 +6,8 @@
 #include <g4calo/RawTowerBuilderByHitIndex.h>
 #include <g4calo/RawTowerDigitizer.h>
 
-#include <g4eiccalos/PHG4ForwardCalCellReco.h>
-#include <g4eiccalos/PHG4ForwardHcalSubsystem.h>
+// #include <g4eiccalos/PHG4ForwardCalCellReco.h>
+#include <g4eiccalos/PHG4BackwardHcalSubsystem.h>
 
 #include <g4eval/CaloEvaluator.h>
 
@@ -85,6 +85,7 @@ void EHCALInit()
 
   BlackHoleGeometry::max_radius = std::max(BlackHoleGeometry::max_radius, G4EHCAL::outer_radius);
   BlackHoleGeometry::max_z = std::max(BlackHoleGeometry::max_z, G4EHCAL::Gz0 + G4EHCAL::Gdz / 2.);
+  BlackHoleGeometry::min_z = std::min(BlackHoleGeometry::min_z, -G4EHCAL::Gz0 - G4EHCAL::Gdz / 2.);
 }
 
 void EHCALSetup(PHG4Reco *g4Reco)
@@ -94,7 +95,7 @@ void EHCALSetup(PHG4Reco *g4Reco)
   Fun4AllServer *se = Fun4AllServer::instance();
 
   /** Use dedicated EHCAL module */
-  PHG4ForwardHcalSubsystem *ehcal = new PHG4ForwardHcalSubsystem("EHCAL");
+  PHG4BackwardHcalSubsystem *ehcal = new PHG4BackwardHcalSubsystem("EHCAL");
 
   ostringstream mapping_EHCAL;
 
