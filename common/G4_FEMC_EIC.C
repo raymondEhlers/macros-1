@@ -36,6 +36,7 @@ namespace Enable
   bool FEMC_CLUSTER = false;
   bool FEMC_EVAL = false;
   bool FEMC_OVERLAPCHECK = false;
+  bool FEMC_LIGHTPROP = false;
   int FEMC_VERBOSITY = 0;
 }  // namespace Enable
 
@@ -43,8 +44,8 @@ namespace G4FEMC
 {
   // from ForwardEcal/mapping/towerMap_FEMC_v007.txt
   const double Gz0 = 310.;
-  const double Gdz = 36.5;
-  const double outer_radius = 182.655;
+  const double Gdz = 38.5;
+  const double outer_radius = 185;
   enum enu_Femc_clusterizer
   {
     kFemcGraphClusterizer,
@@ -84,6 +85,7 @@ void FEMCSetup(PHG4Reco *g4Reco)
 {
   bool AbsorberActive = Enable::ABSORBER || Enable::FEMC_ABSORBER;
   bool OverlapCheck = Enable::OVERLAPCHECK || Enable::FEMC_OVERLAPCHECK;
+  bool doLightPropagation = Enable::LIGHTPROPAGATION || Enable::FEMC_LIGHTPROP;
 
   Fun4AllServer *se = Fun4AllServer::instance();
 
@@ -147,6 +149,7 @@ void FEMCSetup(PHG4Reco *g4Reco)
   femc->SetDetailed(false);
   femc->SuperDetector("FEMC");
   if (AbsorberActive) femc->SetAbsorberActive();
+  femc->DoFullLightPropagation(doLightPropagation);
 
   g4Reco->registerSubsystem(femc);
 }

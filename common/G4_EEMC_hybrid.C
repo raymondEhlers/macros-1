@@ -35,6 +35,7 @@ namespace Enable
   bool EEMCH_CLUSTER = false;
   bool EEMCH_EVAL = false;
   bool EEMCH_OVERLAPCHECK = false;
+  bool EEMCH_LIGHTPROP = false;
   int EEMCH_VERBOSITY = 0;
 }  // namespace Enable
 
@@ -95,7 +96,7 @@ void EEMCHSetup(PHG4Reco *g4Reco)
   bool AbsorberActive = Enable::ABSORBER || Enable::EEMCH_ABSORBER;
   bool OverlapCheck = Enable::OVERLAPCHECK || Enable::EEMCH_OVERLAPCHECK;
   int verbosity = std::max(Enable::VERBOSITY, Enable::EEMCH_VERBOSITY);
-
+  bool doLightPropagation = Enable::LIGHTPROPAGATION || Enable::EEMCH_LIGHTPROP;
   /** Use dedicated EEMCH module */
   ostringstream mapping_eemc_1, mapping_eemc_2;
     
@@ -106,6 +107,8 @@ void EEMCHSetup(PHG4Reco *g4Reco)
   eemc_crystal->SetActive();
   if (AbsorberActive)
     eemc_crystal->SetAbsorberActive();
+
+  eemc_crystal->DoFullLightPropagation(doLightPropagation);
   
   if(G4EEMCH::SETTING::USECUSTOMMAPNOCARBON){
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185_noCarbon.txt";
@@ -133,7 +136,7 @@ void EEMCHSetup(PHG4Reco *g4Reco)
   cout << "setting EEMC crystal mapping: " << mapping_eemc_1.str() << endl;
   eemc_crystal->set_string_param("mappingtower", mapping_eemc_1.str());    
   eemc_crystal->OverlapCheck(OverlapCheck);
-  eemc_crystal->OverlapCheck(true);
+  // eemc_crystal->OverlapCheck(true);
   
   g4Reco->registerSubsystem(eemc_crystal);
   

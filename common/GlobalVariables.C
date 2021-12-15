@@ -30,6 +30,7 @@ namespace Enable
 {
   bool OVERLAPCHECK = false;
   bool ABSORBER = false;
+  bool LIGHTPROPAGATION = false;
   bool DSTOUT = false;
   bool DSTOUT_COMPRESS = false;
   int VERBOSITY = 0;

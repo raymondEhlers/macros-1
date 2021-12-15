@@ -255,6 +255,7 @@ int Fun4All_G4_EICDetector(
       else if (generatorSettings.Contains("bck"))
         INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4, -1.7);
       else if (generatorSettings.Contains("fwd"))
+        // INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(100, 400);
         INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(1.2, 4.0);
       else
         INPUTGENERATOR::SimpleEventGenerator[0]->set_eta_range(-4.0, 4.0);
@@ -473,6 +474,11 @@ int Fun4All_G4_EICDetector(
   }
   if (detectorSettings.find("EEMAPUPDATE") != std::string::npos) {
     G4EEMCH::SETTING::USECUSTOMMAPUPDATED = true;
+  }
+  if (detectorSettings.find("LIGHTPROP") != std::string::npos) {
+    Enable::EEMCH_LIGHTPROP = true;
+    Enable::FEMC_LIGHTPROP = true;
+    Enable::LFHCAL_LIGHTPROP = true;
   }
   Enable::EHCAL = true;
 

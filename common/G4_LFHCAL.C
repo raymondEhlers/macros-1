@@ -36,6 +36,7 @@ namespace Enable
   bool LFHCAL_EVAL = false;
   bool LFHCAL_OVERLAPCHECK = false;
   int LFHCAL_VERBOSITY = 0;
+  bool LFHCAL_LIGHTPROP = false;
 }  // namespace Enable
 
 namespace G4LFHCAL
@@ -153,6 +154,7 @@ void LFHCALSetup(PHG4Reco *g4Reco)
 {
   const bool AbsorberActive = Enable::ABSORBER || Enable::LFHCAL_ABSORBER;
   bool OverlapCheck = Enable::OVERLAPCHECK || Enable::LFHCAL_OVERLAPCHECK;
+  bool doLightPropagation = Enable::LIGHTPROPAGATION || Enable::LFHCAL_LIGHTPROP;
   Fun4AllServer *se = Fun4AllServer::instance();
 
   /** Use dedicated LFHCAL module */
@@ -165,10 +167,12 @@ void LFHCALSetup(PHG4Reco *g4Reco)
   
   fhcal->SetTowerMappingFile(mapping_fhcal_s.str());
   fhcal->OverlapCheck(OverlapCheck);
+  // fhcal->OverlapCheck(true);
   fhcal->SetActive();
   // fhcal->SetDetailed(true);
   fhcal->SuperDetector("LFHCAL");
   if (AbsorberActive) fhcal->SetAbsorberActive();
+  fhcal->DoFullLightPropagation(doLightPropagation);
 
   g4Reco->registerSubsystem(fhcal);
 

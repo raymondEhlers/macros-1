@@ -36,6 +36,7 @@ namespace Enable
   bool FEMC_CLUSTER = false;
   bool FEMC_EVAL = false;
   bool FEMC_OVERLAPCHECK = false;
+  bool FEMC_LIGHTPROP = false;
   int FEMC_VERBOSITY = 0;
 }  // namespace Enable
 
@@ -68,6 +69,7 @@ void FEMCSetup(PHG4Reco *g4Reco, const int absorberactive = 0)
 {
   bool AbsorberActive = Enable::ABSORBER || Enable::FEMC_ABSORBER || (absorberactive > 0);
   bool OverlapCheck = Enable::OVERLAPCHECK || Enable::FEMC_OVERLAPCHECK;
+  bool doLightPropagation = Enable::LIGHTPROPAGATION || Enable::FEMC_LIGHTPROP;
 
   Fun4AllServer *se = Fun4AllServer::instance();
 
@@ -79,6 +81,9 @@ void FEMCSetup(PHG4Reco *g4Reco, const int absorberactive = 0)
   // fsPHENIX ECAL
   femc->SetfsPHENIXDetector();
   mapping_femc << getenv("CALIBRATIONROOT") << G4FEMC::calibfile;
+  femc->SetDetailed(true);
+  femc->SetEICDetector();
+  femc->DoFullLightPropagation(doLightPropagation);
 
   //  cout << mapping_femc.str() << endl;
   femc->SetTowerMappingFile(mapping_femc.str());
