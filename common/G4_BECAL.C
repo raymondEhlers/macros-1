@@ -61,6 +61,10 @@ namespace G4BECAL
   // kSimple_photon_digitization
   // digitization with photon statistics on SiPM with an effective pixel N, ADC conversion and pedestal
   // kSiPM_photon_digitization
+  namespace SETTING
+  {
+    bool useLeadGlass = false;
+  }
 
 }  // namespace G4BECAL
 
@@ -81,8 +85,11 @@ double BECALSetup(PHG4Reco *g4Reco)
   bool OverlapCheck = Enable::OVERLAPCHECK || Enable::BECAL_OVERLAPCHECK;
 
   ostringstream mapping_becal;
-  mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001.txt";
-
+  if(G4BECAL::SETTING::useLeadGlass){
+    mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_LeadGlass.txt";
+  } else {
+    mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001.txt";
+  }
   PHG4BarrelEcalSubsystem *becal = new PHG4BarrelEcalSubsystem("BECAL");
   becal->set_string_param("mapping_file", mapping_becal.str());
   becal->OverlapCheck(OverlapCheck);
@@ -109,7 +116,11 @@ void BECAL_Towers()
   Fun4AllServer *se = Fun4AllServer::instance();
 
   ostringstream mapping_BECAL;
-  mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001.txt";
+  if(G4BECAL::SETTING::useLeadGlass){
+    mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_LeadGlass.txt";
+  } else {
+    mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001.txt";
+  }
   
   const double photoelectron_per_GeV = 5000;
 

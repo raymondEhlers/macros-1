@@ -440,7 +440,9 @@ int Fun4All_G4_EICDetector(
   G4TRACKING::PROJECTION_LFHCAL = true;
 
   Enable::BECAL = true;
-
+  if (detectorSettings.find("BCLG") != std::string::npos) {
+    G4BECAL::SETTING::useLeadGlass = true;
+  }
   Enable::HCALIN = true;
 
   Enable::MAGNET = true;
