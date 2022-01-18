@@ -64,6 +64,8 @@ namespace G4BECAL
   namespace SETTING
   {
     bool useLeadGlass = false;
+    bool useMoreTowers = false;
+    bool newGeometry = false;
   }
 
 }  // namespace G4BECAL
@@ -87,6 +89,12 @@ double BECALSetup(PHG4Reco *g4Reco)
   ostringstream mapping_becal;
   if(G4BECAL::SETTING::useLeadGlass){
     mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_LeadGlass.txt";
+  }else if(G4BECAL::SETTING::newGeometry){
+    if(G4BECAL::SETTING::useMoreTowers){
+      mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_geochange_moretow.txt";
+    }else {
+      mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_geochange.txt";
+    }
   } else {
     mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001.txt";
   }
@@ -118,6 +126,12 @@ void BECAL_Towers()
   ostringstream mapping_BECAL;
   if(G4BECAL::SETTING::useLeadGlass){
     mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_LeadGlass.txt";
+  }else if(G4BECAL::SETTING::newGeometry){
+    if(G4BECAL::SETTING::useMoreTowers){
+      mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_geochange_moretow.txt";
+    }else {
+      mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_geochange.txt";
+    }
   } else {
     mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001.txt";
   }

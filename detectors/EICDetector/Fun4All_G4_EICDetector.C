@@ -443,6 +443,12 @@ int Fun4All_G4_EICDetector(
   if (detectorSettings.find("BCLG") != std::string::npos) {
     G4BECAL::SETTING::useLeadGlass = true;
   }
+  if (detectorSettings.find("BCNG") != std::string::npos) {
+    G4BECAL::SETTING::newGeometry = true;
+    if (detectorSettings.find("BCNGMT") != std::string::npos) {
+      G4BECAL::SETTING::useMoreTowers = true;
+    }
+  }
   Enable::HCALIN = true;
 
   Enable::MAGNET = true;
