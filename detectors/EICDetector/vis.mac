@@ -26,9 +26,11 @@
 # machines. You might have to play with it. GEANT prints out a
 # list of available graphics systems at some point.
 #/vis/open OGLIX
-/vis/open OGL 3000x1900-0+0
-# increase display limit for more complex detectors
 /vis/ogl/set/displayListLimit 500000
+/vis/open OGL 3000x1900-0+0
+/vis/ogl/set/displayListLimit 5000000
+# increase display limit for more complex detectors
+
 /vis/viewer/set/viewpointThetaPhi 260 -40
 #/vis/viewer/set/viewpointThetaPhi 270 0
 /vis/viewer/addCutawayPlane 0 0 0 m 1 0 0

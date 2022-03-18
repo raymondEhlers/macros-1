@@ -149,7 +149,7 @@ void FEMCSetup(PHG4Reco *g4Reco)
   femc->SetDetailed(false);
   femc->SuperDetector("FEMC");
   if (AbsorberActive) femc->SetAbsorberActive();
-  femc->DoFullLightPropagation(doLightPropagation);
+  // femc->DoFullLightPropagation(doLightPropagation);
 
   g4Reco->registerSubsystem(femc);
 }

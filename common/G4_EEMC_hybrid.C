@@ -108,7 +108,7 @@ void EEMCHSetup(PHG4Reco *g4Reco)
   if (AbsorberActive)
     eemc_crystal->SetAbsorberActive();
 
-  eemc_crystal->DoFullLightPropagation(doLightPropagation);
+  // eemc_crystal->DoFullLightPropagation(doLightPropagation);
   
   if(G4EEMCH::SETTING::USECUSTOMMAPNOCARBON){
     mapping_eemc_1 << getenv("CALIBRATIONROOT") << "/CrystalCalorimeter/mapping/crystal_mapping/tower_map_purecrystal_185_noCarbon.txt";

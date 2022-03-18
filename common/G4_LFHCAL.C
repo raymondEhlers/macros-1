@@ -172,7 +172,7 @@ void LFHCALSetup(PHG4Reco *g4Reco)
   // fhcal->SetDetailed(true);
   fhcal->SuperDetector("LFHCAL");
   if (AbsorberActive) fhcal->SetAbsorberActive();
-  fhcal->DoFullLightPropagation(doLightPropagation);
+  // fhcal->DoFullLightPropagation(doLightPropagation);
 
   g4Reco->registerSubsystem(fhcal);
 

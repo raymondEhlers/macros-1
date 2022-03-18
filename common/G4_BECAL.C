@@ -101,6 +101,7 @@ double BECALSetup(PHG4Reco *g4Reco)
   PHG4BarrelEcalSubsystem *becal = new PHG4BarrelEcalSubsystem("BECAL");
   becal->set_string_param("mapping_file", mapping_becal.str());
   becal->OverlapCheck(OverlapCheck);
+  // becal->OverlapCheck(true);
   becal->SetActive();
   becal->SuperDetector("BECAL");
   if (AbsorberActive) becal->SetAbsorberActive();

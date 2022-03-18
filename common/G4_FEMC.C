@@ -83,7 +83,7 @@ void FEMCSetup(PHG4Reco *g4Reco, const int absorberactive = 0)
   mapping_femc << getenv("CALIBRATIONROOT") << G4FEMC::calibfile;
   femc->SetDetailed(true);
   femc->SetEICDetector();
-  femc->DoFullLightPropagation(doLightPropagation);
+  // femc->DoFullLightPropagation(doLightPropagation);
 
   //  cout << mapping_femc.str() << endl;
   femc->SetTowerMappingFile(mapping_femc.str());
