@@ -464,7 +464,14 @@ int Fun4All_G4_EICDetector(
 
   Enable::FEMC = true;
 
-  //Enable::DRCALO = false;
+  if (detectorSettings.find("DRCALO") != std::string::npos) {
+    Enable::DRCALO = true;
+    G4DRCALO::SETTING::FwdConfig = true;
+    G4LFHCAL::SETTING::FwdConfig = true;
+    G4FEMC::SETTING::FwdConfig = true;
+    G4FEMC::SETTING::asymmetric = false;
+    cout << "setting DRCALO stuff" << endl;
+  }
   G4TTL::SETTING::optionDR = 1;
 
   Enable::LFHCAL = true;
@@ -568,6 +575,9 @@ int Fun4All_G4_EICDetector(
       Enable::PIPE = true;
       G4PIPE::use_forward_pipes = true;
     }
+    if(detectorSettings.find("TSERV")!= std::string::npos ){
+      Enable::TrackingService = true;
+    }
     if(detectorSettings.find("Magnet")!= std::string::npos )
       Enable::MAGNET = true;
     if(detectorSettings.find("dRICH")!= std::string::npos )
@@ -586,8 +596,15 @@ int Fun4All_G4_EICDetector(
       Enable::HCALOUT = true;
       Enable::HCALIN = true;
     }
-    if(detectorSettings.find("DR")!= std::string::npos )
+    if(detectorSettings.find("DR")!= std::string::npos ){
       Enable::DRCALO = true;
+      // G4DRCALO::SETTING::PMMA = true;
+      G4DRCALO::SETTING::FwdConfig = true;
+      G4LFHCAL::SETTING::FwdConfig = true;
+      G4FEMC::SETTING::FwdConfig = true;
+      G4FEMC::SETTING::asymmetric = false;
+      cout << "setting DRCALO stuff" << endl;
+    }
     if(detectorSettings.find("FEMC")!= std::string::npos )
       Enable::FEMC = true;
     if(detectorSettings.find("FGEM")!= std::string::npos )

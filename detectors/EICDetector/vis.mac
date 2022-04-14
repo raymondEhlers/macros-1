@@ -27,18 +27,18 @@
 # list of available graphics systems at some point.
 #/vis/open OGLIX
 /vis/ogl/set/displayListLimit 500000
-/vis/open OGL 3000x1900-0+0
+/vis/open OGL 3500x2000-0+0
 /vis/ogl/set/displayListLimit 5000000
 # increase display limit for more complex detectors
 
 /vis/viewer/set/viewpointThetaPhi 260 -40
 #/vis/viewer/set/viewpointThetaPhi 270 0
 /vis/viewer/addCutawayPlane 0 0 0 m 1 0 0
-/vis/viewer/addCutawayPlane 0 0 0 m 0 -1 0
+#/vis/viewer/addCutawayPlane 0 0 0 m 0 -1 0
 # our world is 4x4 meters, the detector is about 1m across
 # zooming by 4 makes it fill the display
-/vis/viewer/zoom 1.0
-#/vis/viewer/zoom 1.5
+#/vis/viewer/zoom 1.0
+/vis/viewer/zoom 1.5
 #
 /vis/viewer/set/background white
 # Use this open statement instead to get a HepRep version 1 file

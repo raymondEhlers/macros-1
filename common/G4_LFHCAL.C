@@ -88,7 +88,7 @@ TString GetMappingFile(){
   else if (G4LFHCAL::SETTING::FwdConfig)
   {
     if (G4LFHCAL::SETTING::longer)
-      mappinFileName += "/LFHcal/mapping/towerMap_LFHCAL_FwdConfig-long.txt";
+      mappinFileName += "/LFHcal/mapping/towerMap_LFHCAL_FwdConfig-long-tailcatcher.txt";
     else 
       mappinFileName += "/LFHcal/mapping/towerMap_LFHCAL_FwdConfig.txt";
   }
