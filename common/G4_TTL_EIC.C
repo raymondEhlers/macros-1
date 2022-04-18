@@ -128,6 +128,7 @@ void TTL_Init()
   if(G4TTL::SETTING::optionGeo == 7){
     cout << "TTL one forward disk in front of dRICH and one backward disk in front of EEMC, barrel CTTL center at radius 64cm" << endl;
     // single disk in front of dRICH (full eta)
+    G4TTL::maxExtension[0][0] = 64;
     G4TTL::layer[2]            = 1;
     G4TTL::minExtension[2][0] = 7.0;
     G4TTL::maxExtension[2][0] = 87;
@@ -149,6 +150,7 @@ void TTL_Init()
     G4TTL::maxExtension[1][0] = 0;
   }
   if(G4TTL::SETTING::optionGeo == 8){
+    G4TTL::maxExtension[0][0] = 64;
     G4TTL::layer[2]            = 3;
     cout << "TTL forward disk 1 in front of dRICH" << endl;
     G4TTL::minExtension[2][0] = 7.0;
