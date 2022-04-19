@@ -64,6 +64,11 @@ void RICHSetup(PHG4Reco *g4Reco)
     TRACKING::FastKalmanFilter->add_zplane_state("RICH", 185);
     TRACKING::ProjectionNames.insert("RICH");
   }
+  if (TRACKING::FastKalmanFilterDefaultECCE)
+  {
+    // project to an reference plane at z=170 cm
+    TRACKING::FastKalmanFilterDefaultECCE->add_zplane_state("RICH", 185);
+  }
 }
 
 void RICHReco()

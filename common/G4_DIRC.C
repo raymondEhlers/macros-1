@@ -82,6 +82,11 @@ void DIRCSetup(PHG4Reco* g4Reco)
     TRACKING::FastKalmanFilter-> add_cylinder_state("hpDIRC", 70);
     TRACKING::ProjectionNames.insert("hpDIRC");
   }
+  if (TRACKING::FastKalmanFilterDefaultECCE)
+  {
+    // project to an reference plane at z=170 cm
+    TRACKING::FastKalmanFilterDefaultECCE-> add_cylinder_state("hpDIRC", 70);
+  }
 
 }
 

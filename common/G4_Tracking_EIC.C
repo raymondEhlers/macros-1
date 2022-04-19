@@ -35,6 +35,7 @@ namespace G4TRACKING
   bool PROJECTION_FEMC = false;
   bool PROJECTION_FHCAL = false;
   bool PROJECTION_LFHCAL = false;
+  bool PROJECTION_DRCALO = false;
 }  // namespace G4TRACKING
 
 //-----------------------------------------------------------------------------//
@@ -44,6 +45,7 @@ void TrackingInit()
   TRACKING::FastKalmanFilterSiliconTrack = new PHG4TrackFastSim("FastKalmanFilterSiliconTrack");
   TRACKING::FastKalmanFilterInnerTrack = new PHG4TrackFastSim("FastKalmanFilterInnerTrack");
   TRACKING::FastKalmanFilterTTLonly = new PHG4TrackFastSim("FastKalmanFilterTTLonly");
+  TRACKING::FastKalmanFilterDefaultECCE = new PHG4TrackFastSim("FastKalmanFilterDefaultECCE");
 }
 
 void InitFastKalmanFilter(PHG4TrackFastSim *kalman_filter)
@@ -90,6 +92,18 @@ void Tracking_Reco()
   TRACKING::FastKalmanFilter->Verbosity(verbosity);
   TRACKING::FastKalmanFilter->set_trackmap_out_name(TRACKING::TrackNodeName);
 
+
+  if (TRACKING::FastKalmanFilterDefaultECCE == nullptr)
+  {
+    cout << __PRETTY_FUNCTION__ << " : missing the expected initialization for TRACKING::FastKalmanFilterTTLonly." << endl;
+    exit(1);
+  }
+  InitFastKalmanFilter(TRACKING::FastKalmanFilterDefaultECCE);
+  TRACKING::FastKalmanFilterDefaultECCE->Verbosity(verbosity);
+  TRACKING::FastKalmanFilterDefaultECCE->set_trackmap_out_name("DefaultTrackMap");
+  TRACKING::FastKalmanFilterDefaultECCE->enable_vertexing(false);
+  se->registerSubsystem(TRACKING::FastKalmanFilterDefaultECCE);
+
   //-------------------------
   // FEMC
   //-------------------------
@@ -97,6 +111,7 @@ void Tracking_Reco()
   if (Enable::FEMC && G4TRACKING::PROJECTION_FEMC)
   {
     TRACKING::FastKalmanFilter->add_state_name("FEMC");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("FEMC");
     TRACKING::ProjectionNames.insert("FEMC");
   }
 
@@ -106,6 +121,7 @@ void Tracking_Reco()
   if (Enable::FHCAL && G4TRACKING::PROJECTION_FHCAL)
   {
     TRACKING::FastKalmanFilter->add_state_name("FHCAL");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("FHCAL");
     TRACKING::ProjectionNames.insert("FHCAL");
   }
   //-------------------------
@@ -114,6 +130,7 @@ void Tracking_Reco()
   if (Enable::LFHCAL && G4TRACKING::PROJECTION_LFHCAL)
   {
     TRACKING::FastKalmanFilter->add_state_name("LFHCAL");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("LFHCAL");
     TRACKING::ProjectionNames.insert("LFHCAL");
   }
   //-------------------------
@@ -122,6 +139,7 @@ void Tracking_Reco()
   if (Enable::CEMC && G4TRACKING::PROJECTION_CEMC)
   {
     TRACKING::FastKalmanFilter->add_state_name("CEMC");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("CEMC");
     TRACKING::ProjectionNames.insert("CEMC");
   }
   //-------------------------
@@ -130,6 +148,7 @@ void Tracking_Reco()
   if (Enable::BECAL && G4TRACKING::PROJECTION_BECAL)
   {
     TRACKING::FastKalmanFilter->add_state_name("BECAL");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("BECAL");
     TRACKING::ProjectionNames.insert("BECAL");
   }
   //-------------------------
@@ -138,6 +157,7 @@ void Tracking_Reco()
   if (Enable::HCALOUT && G4TRACKING::PROJECTION_HCALIN)
   {
     TRACKING::FastKalmanFilter->add_state_name("HCALIN");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("HCALIN");
     TRACKING::ProjectionNames.insert("HCALIN");
   }
   //-------------------------
@@ -146,6 +166,7 @@ void Tracking_Reco()
   if (Enable::HCALOUT && G4TRACKING::PROJECTION_HCALOUT)
   {
     TRACKING::FastKalmanFilter->add_state_name("HCALOUT");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("HCALOUT");
     TRACKING::ProjectionNames.insert("HCALOUT");
   }
   //-------------------------
@@ -154,6 +175,7 @@ void Tracking_Reco()
   if ((Enable::EEMC or Enable::EEMCH)&& G4TRACKING::PROJECTION_EEMC)
   {
     TRACKING::FastKalmanFilter->add_state_name("EEMC");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("EEMC");
     TRACKING::ProjectionNames.insert("EEMC");
   }
   //-------------------------
@@ -162,7 +184,17 @@ void Tracking_Reco()
   if (Enable::EHCAL && G4TRACKING::PROJECTION_EHCAL)
   {
     TRACKING::FastKalmanFilter->add_state_name("EHCAL");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("EHCAL");
     TRACKING::ProjectionNames.insert("EHCAL");
+  }
+  //-------------------------
+  // DRCALO
+  //-------------------------
+  if (Enable::DRCALO && G4TRACKING::PROJECTION_DRCALO)
+  {
+    TRACKING::FastKalmanFilter->add_state_name("DRCALO");
+    TRACKING::FastKalmanFilterDefaultECCE->add_state_name("DRCALO");
+    TRACKING::ProjectionNames.insert("DRCALO");
   }
 
   se->registerSubsystem(TRACKING::FastKalmanFilter);

@@ -21,6 +21,7 @@ namespace EVENT_EVALUATOR
 {
   int Verbosity = 0;
   float EnergyThreshold = 0.05;
+  int MCStackDepth = 0;
 }  // namespace EVENT_EVALUATOR
 
 void Event_Eval(const std::string &filename)
@@ -69,6 +70,7 @@ void Event_Eval(const std::string &filename)
 
   eval->set_do_MCPARTICLES(true);
   eval->set_do_GEOMETRY(true);
+  eval->set_depth_MCstack(EVENT_EVALUATOR::MCStackDepth);
   eval->set_do_HEPMC(Input::PYTHIA6 or Input::PYTHIA8 or Input::SARTRE or Input::HEPMC or Input::READEIC);
   eval->set_do_store_event_level_info(Input::PYTHIA6 or Input::PYTHIA8 or Input::READEIC);
   se->registerSubsystem(eval);

@@ -146,8 +146,8 @@ void TTL_Init()
 
     // barrel layer at 64cm
     G4TTL::positionToVtx[1][0] = 64.;
-    G4TTL::minExtension[1][0] = 140;
-    G4TTL::maxExtension[1][0] = 0;
+    G4TTL::minExtension[1][0] = 142;
+    G4TTL::maxExtension[1][0] = -5;
   }
   if(G4TTL::SETTING::optionGeo == 8){
     G4TTL::maxExtension[0][0] = 64;
@@ -167,10 +167,34 @@ void TTL_Init()
     G4TTL::layer[0]            = 1;
 
     G4TTL::positionToVtx[1][0] = 64.;
-    G4TTL::minExtension[1][0] = 140;
-    G4TTL::maxExtension[1][0] = 0;
+    G4TTL::minExtension[1][0] = 142;
+    G4TTL::maxExtension[1][0] = -5;
   }
 
+  if(G4TTL::SETTING::optionGeo == 9){
+    cout << "TTL one forward disk in front of dRICH and two backward disks ( one in front of EEMC and one behind EEMC), barrel CTTL center at radius 64cm" << endl;
+    // single disk in front of dRICH (full eta)
+    G4TTL::layer[2]            = 1;
+    G4TTL::minExtension[2][0] = 7.0;
+    G4TTL::maxExtension[2][0] = 87;
+    G4TTL::positionToVtx[2][0] = 182.;
+    G4TTL::xoffsetFTTLIP6[0] = -2.7;
+    G4TTL::xoffsetFTTLIP8[0] = 3.0;
+
+    // single disk in front of EEMC
+    G4TTL::layer[0]            = 2;
+    G4TTL::maxExtension[0][0] = 64; // layer in front of EEMC
+    G4TTL::minExtension[0][1] = 8.0;
+    G4TTL::maxExtension[0][1] = 64; // layer behind EEMC
+    G4TTL::positionToVtx[0][1] = -225.;
+    // G4TTL::xoffsetFTTLIP6[0] = -2.7;
+    // G4TTL::xoffsetFTTLIP8[0] = 3.0;
+
+    // barrel layer at 64cm
+    G4TTL::positionToVtx[1][0] = 64.;
+    G4TTL::minExtension[1][0] = 142;
+    G4TTL::maxExtension[1][0] = -5;
+  }
   if (G4TTL::SETTING::optionDR == 2 && G4TTL::SETTING::optionGeo == 4 ){
      cout << "TTL setup infront of ECals  with 2 layers fwd/bwd & 1 layer barrel, 1 layer before HCals everywhere choosen!" << endl;
      cout << "conflicting in forward region with DR calo, reducing by 1 layer!" << endl;
@@ -279,6 +303,9 @@ int make_forward_station(string name, PHG4Reco *g4Reco,
                                              1,                                 //      const float eff,
                                              0);                                //      const float noise
     TRACKING::FastKalmanFilter->add_zplane_state(name, zpos);
+    TRACKING::ProjectionNames.insert(name);
+  }
+  if(TRACKING::FastKalmanFilterTTLonly){
     TRACKING::FastKalmanFilterTTLonly->add_phg4hits(string("G4HIT_") + name,           //      const std::string& phg4hitsNames,
                                              PHG4TrackFastSim::Vertical_Plane,  //      const DETECTOR_TYPE phg4dettype,
                                              G4TTL::PositionResolution,           //      const float radres,
@@ -287,7 +314,18 @@ int make_forward_station(string name, PHG4Reco *g4Reco,
                                              1,                                 //      const float eff,
                                              0);                                //      const float noise
     TRACKING::FastKalmanFilterTTLonly->add_zplane_state(name, zpos);
-    TRACKING::ProjectionNames.insert(name);
+  }
+  if(TRACKING::FastKalmanFilterDefaultECCE){
+    if(!(G4TTL::SETTING::optionGeo == 9 && name.find("ETTL_1") != string::npos)){
+      TRACKING::FastKalmanFilterDefaultECCE->add_phg4hits(string("G4HIT_") + name,           //      const std::string& phg4hitsNames,
+                                              PHG4TrackFastSim::Vertical_Plane,  //      const DETECTOR_TYPE phg4dettype,
+                                              G4TTL::PositionResolution,           //      const float radres,
+                                              G4TTL::PositionResolution,           //      const float phires,
+                                              tSilicon / sqrt(12.),              //      const float lonres, *ignored in plane detector*
+                                              1,                                 //      const float eff,
+                                              0);                                //      const float noise
+      TRACKING::FastKalmanFilterDefaultECCE->add_zplane_state(name, zpos);
+    }
   }
 
   return 0;
@@ -363,6 +401,18 @@ int make_forward_station_basic(string name, PHG4Reco *g4Reco,
     TRACKING::FastKalmanFilter->add_zplane_state(name, zpos);
     TRACKING::ProjectionNames.insert(name);
   }
+
+  if (TRACKING::FastKalmanFilterDefaultECCE)
+  {
+    TRACKING::FastKalmanFilterDefaultECCE->add_phg4hits(string("G4HIT_") + name,           //      const std::string& phg4hitsNames,
+                                             PHG4TrackFastSim::Vertical_Plane,  //      const DETECTOR_TYPE phg4dettype,
+                                             G4TTL::PositionResolution,           //      const float radres,
+                                             G4TTL::PositionResolution,           //      const float phires,
+                                             tSilicon / sqrt(12.),              //      const float lonres, *ignored in plane detector*
+                                             1,                                 //      const float eff,
+                                             0);                                //      const float noise
+    TRACKING::FastKalmanFilterDefaultECCE->add_zplane_state(name, zpos);
+  }
   return 0;
 }
 
@@ -401,6 +451,20 @@ int make_barrel_layer(string name, PHG4Reco *g4Reco,
     TRACKING::FastKalmanFilter->add_cylinder_state(name, radius);
 
     TRACKING::ProjectionNames.insert(name);
+  }
+
+
+  if (TRACKING::FastKalmanFilterDefaultECCE)
+  {
+    TRACKING::FastKalmanFilterDefaultECCE->add_phg4hits(string("G4HIT_") + name,     //      const std::string& phg4hitsNames,
+                                             PHG4TrackFastSim::Cylinder,  //      const DETECTOR_TYPE phg4dettype,
+                                             tSilicon / sqrt(12.),        //      const float radres,
+                                             G4TTL::PositionResolution,     //      const float phires,
+                                             G4TTL::PositionResolution,     //      const float lonres,
+                                             1,                           //      const float eff,
+                                             0);                          //      const float noise
+    TRACKING::FastKalmanFilterDefaultECCE->add_cylinder_state(name, radius);
+
   }
 
   return 0;
@@ -463,6 +527,18 @@ int make_barrel_layer_basic(string name, PHG4Reco *g4Reco,
     TRACKING::FastKalmanFilter->add_cylinder_state(name, radius);
 
     TRACKING::ProjectionNames.insert(name);
+  }
+  if (TRACKING::FastKalmanFilterDefaultECCE)
+  {
+    TRACKING::FastKalmanFilterDefaultECCE->add_phg4hits(string("G4HIT_") + name,     //      const std::string& phg4hitsNames,
+                                             PHG4TrackFastSim::Cylinder,  //      const DETECTOR_TYPE phg4dettype,
+                                             tSilicon / sqrt(12.),        //      const float radres,
+                                             G4TTL::PositionResolution,     //      const float phires,
+                                             G4TTL::PositionResolution,     //      const float lonres,
+                                             1,                           //      const float eff,
+                                             0);                          //      const float noise
+    TRACKING::FastKalmanFilterDefaultECCE->add_cylinder_state(name, radius);
+
   }
 
   return 0;

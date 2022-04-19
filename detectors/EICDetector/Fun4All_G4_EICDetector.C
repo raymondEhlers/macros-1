@@ -109,7 +109,7 @@ int Fun4All_G4_EICDetector(
   Input::SIMPLE = false;
   if (particlemomMin>-1 && particlemomMax>-1){
     Input::SIMPLE = true;
-    Input::SIMPLE_VERBOSITY = 0;
+    Input::SIMPLE_VERBOSITY = 1;
     if (generatorSettings.Contains("Two"))
       Input::SIMPLE_NUMBER = 2; // if you need 2 of them
     if (generatorSettings.Contains("Multi"))
@@ -188,7 +188,7 @@ int Fun4All_G4_EICDetector(
         else if (generatorSettings.Contains("bck"))
           INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-4, -1.7);
         else if (generatorSettings.Contains("fwd"))
-          INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(1.2, 4.0);
+          INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(1.2, 3.7);
         else
           INPUTGENERATOR::SimpleEventGenerator[igen]->set_eta_range(-4.0, 4.0);
 
@@ -220,7 +220,7 @@ int Fun4All_G4_EICDetector(
         else if (generatorSettings.Contains("Electron"))
           INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("e-", 1);
         else if (generatorSettings.Contains("PiZero"))
-          INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles("pi0", 1);
+          INPUTGENERATOR::SimpleEventGenerator[igen]->add_particles(111, 1);
         else {
           std::cout << "You didn't specify which particle you wanted to generate, exiting" << std::endl;
           return 0;
@@ -274,7 +274,7 @@ int Fun4All_G4_EICDetector(
       else if (generatorSettings.Contains("SimpleElectron"))
         INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("e-", 1);
       else if (generatorSettings.Contains("SimplePiZero"))
-        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles("pi0", 1);
+        INPUTGENERATOR::SimpleEventGenerator[0]->add_particles(111, 1);
       else {
         std::cout << "You didn't specify which particle you wanted to generate, exiting" << std::endl;
         return 0;
@@ -299,7 +299,7 @@ int Fun4All_G4_EICDetector(
   }
   if(particlemomMin>-1 && particlemomMax == -1){
     PHG4ParticleGenerator *gen = new PHG4ParticleGenerator("PGENERATOR");
-    gen->set_name("pi-");
+    gen->set_name("pi0");
     // gen->set_name("pi0");
     gen->set_vtx(0, 0, 0);
     gen->set_eta_range(-4.0, 4.0);            // around midrapidity
@@ -334,7 +334,9 @@ int Fun4All_G4_EICDetector(
   // add the settings for other with [1], next with [2]...
   if (Input::GUN)
   {
-    INPUTGENERATOR::Gun[0]->AddParticle("pi-", 0, 1, 0);
+    Input::GUN_NUMBER = 1;
+    // INPUTGENERATOR::Gun[0]->AddParticle("pi-", 0, 1, 0);
+    INPUTGENERATOR::Gun[0]->AddParticle("pi0", 0, 1, 0);
     INPUTGENERATOR::Gun[0]->set_vtx(0, 0, 0);
   }
   // pythia6
@@ -472,6 +474,7 @@ int Fun4All_G4_EICDetector(
   G4TRACKING::PROJECTION_FEMC = true;
   G4TRACKING::PROJECTION_FHCAL = true;
   G4TRACKING::PROJECTION_LFHCAL = true;
+  G4TRACKING::PROJECTION_DRCALO = true;
 
   Enable::BECAL = true;
   if (detectorSettings.find("BCLG") != std::string::npos) {
@@ -498,6 +501,8 @@ int Fun4All_G4_EICDetector(
 
   Enable::FEMC = true;
 
+  Enable::LFHCAL = true;
+
   if (detectorSettings.find("DRCALO") != std::string::npos) {
     Enable::DRCALO = true;
     G4DRCALO::SETTING::FwdConfig = true;
@@ -507,8 +512,6 @@ int Fun4All_G4_EICDetector(
     cout << "setting DRCALO stuff" << endl;
   }
   G4TTL::SETTING::optionDR = 1;
-
-  Enable::LFHCAL = true;
 
   // EICDetector geometry - 'electron' direction
   Enable::EEMCH = true;
@@ -776,6 +779,7 @@ int Fun4All_G4_EICDetector(
     }
   }
   // EVENT_EVALUATOR::Verbosity = 1;
+  EVENT_EVALUATOR::MCStackDepth = 1;
   // EVENT_EVALUATOR::EnergyThreshold = 0.05; // GeV
 
   //Enable::USER = true;

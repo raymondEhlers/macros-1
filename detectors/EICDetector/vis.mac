@@ -39,7 +39,7 @@
 /vis/viewer/set/cutawayMode multiply
 /vis/viewer/addCutawayPlane -0.05 0 0 m 1 0 0
 /vis/viewer/addCutawayPlane 0.05 0 0 m -1 0 0
-/vis/viewer/addCutawayPlane 0 0 -2.9 m 0 0 1
+#/vis/viewer/addCutawayPlane 0 0 -2.9 m 0 0 1
 /vis/viewer/zoom 2.2
 #
 # our world is 4x4 meters, the detector is about 1m across

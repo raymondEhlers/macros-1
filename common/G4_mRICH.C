@@ -60,6 +60,11 @@ void mRICHSetup(PHG4Reco *g4Reco, const int detectorSetup = 1,  //1: full setup;
     TRACKING::FastKalmanFilter-> add_zplane_state("mRICH", -125);
     TRACKING::ProjectionNames.insert("mRICH");
   }
+  if (TRACKING::FastKalmanFilterDefaultECCE)
+  {
+    // project to an reference plane at z=170 cm
+    TRACKING::FastKalmanFilterDefaultECCE-> add_zplane_state("mRICH", -125);
+  }
 }
 
 
