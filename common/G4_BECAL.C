@@ -49,6 +49,7 @@ namespace G4BECAL
   double maxz = 371;
   double topradius =  138;
   double radius =  85;
+  double timecut =  -1;
 
   // this is default set to -1.5<eta<1.24 for 2018 Letter of Intent
   // if the user changes these, the z position of the
@@ -144,6 +145,9 @@ void BECAL_Towers()
   tower_BECAL->Detector("BECAL");
   tower_BECAL->set_sim_tower_node_prefix("SIM");
   tower_BECAL->EminCut(1e-7);
+  if(G4BECAL::timecut != -1){
+    tower_BECAL->set_hit_time_window(G4BECAL::timecut); // in ns
+  }
   tower_BECAL->GeometryTableFile(mapping_BECAL.str());
   tower_BECAL->Verbosity(verbosity);
   se->registerSubsystem(tower_BECAL);

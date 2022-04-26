@@ -48,6 +48,7 @@ namespace G4EEMCH
   //  double Gz0 = -170.;
   double Gdz = 20. + 0.1;
   double Gz0 = -180.;
+  double timecut = -1;
   
   namespace SETTING
   {
@@ -209,6 +210,9 @@ void EEMCH_Towers()
   RawTowerBuilderByHitIndex *tower_EEMC_crystal = new RawTowerBuilderByHitIndex("TowerBuilder_EEMC_crystal");
   tower_EEMC_crystal->Detector("EEMC");
   tower_EEMC_crystal->set_sim_tower_node_prefix("SIM");
+  if(G4EEMCH::timecut != -1){
+    tower_EEMC_crystal->set_hit_time_window(G4EEMCH::timecut); // in ns
+  }
   tower_EEMC_crystal->GeometryTableFile(mapping_eemc_1.str());
   se->registerSubsystem(tower_EEMC_crystal);
   
@@ -246,6 +250,9 @@ void EEMCH_Towers()
     RawTowerBuilderByHitIndex *tower_EEMC_glass = new RawTowerBuilderByHitIndex("TowerBuilder_EEMC_glass");
     tower_EEMC_glass->Detector("EEMC_glass");
     tower_EEMC_glass->set_sim_tower_node_prefix("SIM");
+    if(G4EEMCH::timecut != -1){
+      tower_EEMC_glass->set_hit_time_window(G4EEMCH::timecut); // in ns
+    }
     tower_EEMC_glass->GeometryTableFile(mapping_eemc_2.str());
     se->registerSubsystem(tower_EEMC_glass);
 

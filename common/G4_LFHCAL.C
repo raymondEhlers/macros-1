@@ -45,6 +45,7 @@ namespace G4LFHCAL
   double Gz0 = 400.;
   double Gdz = 100.;
   double outer_radius = 265.;
+  double timecut = -1;
   enum enu_FHcal_clusterizer
   {
     kFHcalGraphClusterizer,
@@ -198,6 +199,9 @@ void LFHCAL_Towers()
   RawTowerBuilderByHitIndexLHCal *tower_LFHCAL = new RawTowerBuilderByHitIndexLHCal("TowerBuilder_LFHCAL");
   tower_LFHCAL->Detector("LFHCAL");
   tower_LFHCAL->set_sim_tower_node_prefix("SIM");
+  if(G4LFHCAL::timecut != -1){
+    tower_LFHCAL->set_hit_time_window(G4LFHCAL::timecut); // in ns
+  }
   tower_LFHCAL->GeometryTableFile(mapping_fhcal_s.str());
 
   se->registerSubsystem(tower_LFHCAL);

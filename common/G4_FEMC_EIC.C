@@ -46,6 +46,7 @@ namespace G4FEMC
   const double Gz0 = 310.;
   const double Gdz = 38.5;
   const double outer_radius = 185;
+  double timecut = -1;
   enum enu_Femc_clusterizer
   {
     kFemcGraphClusterizer,
@@ -240,6 +241,9 @@ void FEMC_Towers()
   RawTowerBuilderByHitIndex *tower_FEMC = new RawTowerBuilderByHitIndex("TowerBuilder_FEMC");
   tower_FEMC->Detector("FEMC");
   tower_FEMC->set_sim_tower_node_prefix("SIM");
+  if(G4FEMC::timecut != -1){
+    tower_FEMC->set_hit_time_window(G4FEMC::timecut); // in ns
+  }
   tower_FEMC->GeometryTableFile(mapping_femc.str());
 
   se->registerSubsystem(tower_FEMC);

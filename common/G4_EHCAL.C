@@ -45,6 +45,7 @@ namespace G4EHCAL
   double Gz0 = 400.;
   double Gdz = 100.;
   double outer_radius = 262.;
+  double timecut = -1;
   enum enu_EHCAL_clusterizer
   {
     kEHCALGraphClusterizer,
@@ -189,6 +190,9 @@ void EHCAL_Towers()
   RawTowerBuilderByHitIndex *tower_EHCAL = new RawTowerBuilderByHitIndex("TowerBuilder_EHCAL");
   tower_EHCAL->Detector("EHCAL");
   tower_EHCAL->set_sim_tower_node_prefix("SIM");
+  if(G4EHCAL::timecut != -1){
+    tower_EHCAL->set_hit_time_window(G4EHCAL::timecut); // in ns
+  }
   tower_EHCAL->GeometryTableFile(mapping_EHCAL.str());
 
   se->registerSubsystem(tower_EHCAL);

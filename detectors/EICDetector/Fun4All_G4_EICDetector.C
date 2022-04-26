@@ -391,6 +391,7 @@ int Fun4All_G4_EICDetector(
   {
     //! apply EIC beam parameter following EIC CDR
     INPUTGENERATOR::EICFileReader->SetFirstEntry(skip);
+    cout << "skipping " << skip << " events" << endl;
     Input::ApplyEICBeamParameter(INPUTGENERATOR::EICFileReader);
   }
 
@@ -503,6 +504,18 @@ int Fun4All_G4_EICDetector(
 
   Enable::LFHCAL = true;
 
+  double defTimeCut = 200.;
+  if (detectorSettings.find("TIMECUT") != std::string::npos) {
+    auto pos = detectorSettings.find("TIMECUT");
+    defTimeCut = std::stod(detectorSettings.substr(pos + 8, pos + 8 + 3));
+    cout << "using timecut of " << defTimeCut << " ns" << endl;
+    G4LFHCAL::timecut = defTimeCut;
+    G4DRCALO::timecut = defTimeCut;
+    G4BECAL::timecut = defTimeCut;
+    G4FEMC::timecut = defTimeCut;
+    G4EEMCH::timecut = defTimeCut;
+    G4EHCAL::timecut = defTimeCut;
+  }
   if (detectorSettings.find("DRCALO") != std::string::npos) {
     Enable::DRCALO = true;
     G4DRCALO::SETTING::FwdConfig = true;
