@@ -67,6 +67,7 @@ namespace G4BECAL
     bool useLeadGlass = false;
     bool useMoreTowers = false;
     bool newGeometry = false;
+    bool useNonProjective = false;
   }
 
 }  // namespace G4BECAL
@@ -87,21 +88,23 @@ double BECALSetup(PHG4Reco *g4Reco)
   bool AbsorberActive = Enable::ABSORBER || Enable::BECAL_ABSORBER;
   bool OverlapCheck = Enable::OVERLAPCHECK || Enable::BECAL_OVERLAPCHECK;
 
-  ostringstream mapping_becal;
+  ostringstream mapping_BECAL;
   if(G4BECAL::SETTING::useLeadGlass){
-    mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_LeadGlass.txt";
+    mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_LeadGlass.txt";
+  } else if(G4BECAL::SETTING::useNonProjective){
+    mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_nonproj.txt";
   }else if(G4BECAL::SETTING::newGeometry){
     if(G4BECAL::SETTING::useMoreTowers){
-      mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_geochange_moretow.txt";
+      mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_geochange_moretow.txt";
     }else {
-      mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_geochange.txt";
+      mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_geochange.txt";
     }
   } else {
-    mapping_becal << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001.txt";
+    mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001.txt";
   }
   PHG4BarrelEcalSubsystem *becal = new PHG4BarrelEcalSubsystem("BECAL");
-  becal->set_string_param("mapping_file", mapping_becal.str());
-  std::cout << "using " << mapping_becal.str() << std::endl;
+  becal->set_string_param("mapping_file", mapping_BECAL.str());
+  std::cout << "using " << mapping_BECAL.str() << std::endl;
   becal->OverlapCheck(OverlapCheck);
   // becal->OverlapCheck(true);
   becal->SetActive();
@@ -129,6 +132,8 @@ void BECAL_Towers()
   ostringstream mapping_BECAL;
   if(G4BECAL::SETTING::useLeadGlass){
     mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_LeadGlass.txt";
+  } else if(G4BECAL::SETTING::useNonProjective){
+    mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_nonproj.txt";
   }else if(G4BECAL::SETTING::newGeometry){
     if(G4BECAL::SETTING::useMoreTowers){
       mapping_BECAL << getenv("CALIBRATIONROOT") << "/BarrelEcal/mapping/towerMap_BEMC_v001_geochange_moretow.txt";

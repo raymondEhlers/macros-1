@@ -461,7 +461,9 @@ int Fun4All_G4_EICDetector(
   // if(G4TTL::SETTING::optionGeo == 7)
     // Enable::FGEM = true;
   // Enable::BGEM = true; // not yet defined in this model
-
+  if (detectorSettings.find("NONPROJT") != std::string::npos) {
+    Enable::AI_TRACKINGGEO = false;
+  }
   Enable::TRACKING = true;
   Enable::TRACKING_EVAL = Enable::TRACKING && false;
   G4TRACKING::DISPLACED_VERTEX = true;  // this option exclude vertex in the track fitting and use RAVE to reconstruct primary and 2ndary vertexes
@@ -480,6 +482,9 @@ int Fun4All_G4_EICDetector(
   Enable::BECAL = true;
   if (detectorSettings.find("BCLG") != std::string::npos) {
     G4BECAL::SETTING::useLeadGlass = true;
+  }
+  if (detectorSettings.find("BCNP") != std::string::npos) {
+    G4BECAL::SETTING::useNonProjective = true;
   }
   if (detectorSettings.find("BCNG") != std::string::npos) {
     G4BECAL::SETTING::newGeometry = true;
@@ -672,7 +677,7 @@ int Fun4All_G4_EICDetector(
       Enable::FHCAL = true;
     if(detectorSettings.find("LFHCAL")!= std::string::npos )
       Enable::LFHCAL = true;
-    if(detectorSettings.find("BECAL")!= std::string::npos )
+    if(detectorSettings.find("BECAL")!= std::string::npos || detectorSettings.find("BEMC")!= std::string::npos )
       Enable::BECAL = true;
     if(detectorSettings.find("EHCAL")!= std::string::npos )
       Enable::EHCAL = true;
