@@ -260,7 +260,7 @@ double TrackingService(PHG4Reco *g4Reco, double radius)
   double AlThickness = 0.;           // 0. cms
   double WaterThickness = 0.70;      // 0.25256 cms
   double PlasticThickness = 0.48;    // 0.241488 cms
-  double CarbonThickness = shellX0;  // 0.3 cms
+  double CarbonThickness = shellX0;  // 0.3 cms -> 1% X/X0
 
   if(Enable::AI_TRACKINGGEO){
     // Cylinder from end Disk to EGEM

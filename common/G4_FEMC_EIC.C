@@ -138,7 +138,8 @@ void FEMCSetup(PHG4Reco *g4Reco)
   else if (G4FEMC::SETTING::FwdSquare)
   {
     if (G4FEMC::SETTING::readoutsplit)
-      mapping_femc << getenv("CALIBRATIONROOT") << "/ForwardEcal/mapping/towerMap_FEMC_FwdSquare_ROS.txt";
+      mapping_femc << getenv("CALIBRATIONROOT") << "/ForwardEcal/mapping/towerMap_FEMC_ALICETB.txt";
+      // mapping_femc << getenv("CALIBRATIONROOT") << "/ForwardEcal/mapping/towerMap_FEMC_FwdSquare_ROS.txt";
     else
       mapping_femc << getenv("CALIBRATIONROOT") << "/ForwardEcal/mapping/towerMap_FEMC_FwdSquare.txt";
   }
@@ -155,8 +156,10 @@ void FEMCSetup(PHG4Reco *g4Reco)
   cout << mapping_femc.str() << endl;
   femc->SetTowerMappingFile(mapping_femc.str());
   femc->OverlapCheck(OverlapCheck);
+  // femc->OverlapCheck(true);
   femc->SetActive();
   femc->SetDetailed(false);
+  // femc->SetDetailed(true);
   femc->SuperDetector("FEMC");
   if (AbsorberActive) femc->SetAbsorberActive();
   // femc->DoFullLightPropagation(doLightPropagation);
@@ -228,7 +231,8 @@ void FEMC_Towers()
   else if (G4FEMC::SETTING::FwdSquare)
   {
     if (G4FEMC::SETTING::readoutsplit)
-      mapping_femc << getenv("CALIBRATIONROOT") << "/ForwardEcal/mapping/towerMap_FEMC_FwdSquare_ROS.txt";
+      mapping_femc << getenv("CALIBRATIONROOT") << "/ForwardEcal/mapping/towerMap_FEMC_ALICETB.txt";
+      // mapping_femc << getenv("CALIBRATIONROOT") << "/ForwardEcal/mapping/towerMap_FEMC_FwdSquare_ROS.txt";
     else
       mapping_femc << getenv("CALIBRATIONROOT") << "/ForwardEcal/mapping/towerMap_FEMC_FwdSquare.txt";
   }

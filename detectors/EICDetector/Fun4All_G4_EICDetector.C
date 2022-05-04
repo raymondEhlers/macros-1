@@ -438,6 +438,11 @@ int Fun4All_G4_EICDetector(
   Enable::TrackingService = true;
   // Enable::TrackingService_VERBOSITY = INT_MAX - 10;
   Enable::BARREL = true;
+  if (detectorSettings.find("BRRLMAT5") != std::string::npos) {
+    G4BARRELEIC::SETTING::SAGITTA055X0 = true;
+  } else if (detectorSettings.find("BRRLMAT2") != std::string::npos) {
+    G4BARRELEIC::SETTING::SAGITTA020X0 = true;
+  }
   // fst
   Enable::FST = true;
 
@@ -454,7 +459,11 @@ int Fun4All_G4_EICDetector(
   else {
     G4TTL::SETTING::optionGeo = 7;
   }
-
+  if (detectorSettings.find("TTLOFF") != std::string::npos) {
+    Enable::FTTL = false;
+    Enable::ETTL = false;
+    Enable::CTTL = false;
+  }
   // gems
   Enable::EGEM = false;
   Enable::FGEM = false;
@@ -646,6 +655,8 @@ int Fun4All_G4_EICDetector(
       Enable::MAGNET = true;
     if(detectorSettings.find("dRICH")!= std::string::npos )
       Enable::RICH = true;
+    if(detectorSettings.find("mRICH")!= std::string::npos )
+      Enable::mRICH = true;
     // if(detectorSettings.find("ALLSILICON")!= std::string::npos )
     //   Enable::ALLSILICON = true;
     if(detectorSettings.find("CEMC")!= std::string::npos )
@@ -669,8 +680,12 @@ int Fun4All_G4_EICDetector(
       G4FEMC::SETTING::asymmetric = false;
       cout << "setting DRCALO stuff" << endl;
     }
-    if(detectorSettings.find("FEMC")!= std::string::npos )
+    if(detectorSettings.find("FEMC")!= std::string::npos ){
       Enable::FEMC = true;
+      if(detectorSettings.find("FWDC")!= std::string::npos )
+        G4FEMC::SETTING::FwdSquare = true;
+        G4FEMC::SETTING::asymmetric = false;
+    }
     if(detectorSettings.find("FGEM")!= std::string::npos )
       Enable::FGEM = true;
     if((detectorSettings.find("FHCAL")!= std::string::npos) && !(detectorSettings.find("LFHCAL")!= std::string::npos) )

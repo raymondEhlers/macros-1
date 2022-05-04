@@ -17,6 +17,17 @@ namespace Enable
 {
   bool BARREL = false;
 }  // namespace Enable
+
+namespace G4BARRELEIC
+{
+  namespace SETTING
+  {
+    bool SAGITTA055X0 = false;
+    bool SAGITTA020X0 = false;
+  }  // namespace SETTING
+}  // namespace G4BARRELEIC
+
+
 //-----------------------------------------------------------------------------------//
 void BarrelInit()
 {
@@ -127,7 +138,13 @@ void Barrel(PHG4Reco *g4Reco, int det_ver = 3)
       cyl = new PHG4CylinderSubsystem("BARR", ilayer);
       cyl->set_string_param("material", "G4_Si");
       cyl->set_double_param("radius", si_r_pos[ilayer]);
-      cyl->set_double_param("thickness", 0.05 / 100. * 9.37);
+      if(G4BARRELEIC::SETTING::SAGITTA055X0){
+        cyl->set_double_param("thickness", 0.55 / 100. * 9.37);
+      } else if(G4BARRELEIC::SETTING::SAGITTA020X0){
+        cyl->set_double_param("thickness", 0.2 / 100. * 9.37);
+      } else {
+        cyl->set_double_param("thickness", 0.05 / 100. * 9.37);
+      }
       cyl->set_double_param("place_z", (z_h_length[ilayer] - z_e_length[ilayer])/2);
       cyl->set_double_param("length", si_z_length[ilayer]);
       cyl->SetActive();
@@ -153,7 +170,13 @@ void Barrel(PHG4Reco *g4Reco, int det_ver = 3)
       cyl = new PHG4CylinderSubsystem("BARR", ilayer);
       cyl->set_string_param("material", "G4_Si");
       cyl->set_double_param("radius", si_r_pos[ilayer]);
-      cyl->set_double_param("thickness", 0.05 / 100. * 9.37);
+      if(G4BARRELEIC::SETTING::SAGITTA055X0){
+        cyl->set_double_param("thickness", 0.55 / 100. * 9.37);
+      } else if(G4BARRELEIC::SETTING::SAGITTA020X0){
+        cyl->set_double_param("thickness", 0.2 / 100. * 9.37);
+      } else {
+        cyl->set_double_param("thickness", 0.05 / 100. * 9.37);
+      }
       cyl->set_double_param("place_z", (z_h_length[ilayer] + z_e_length[ilayer])/2);
       cyl->set_double_param("length", (z_h_length[ilayer] - z_e_length[ilayer]));
       cyl->SetActive();
