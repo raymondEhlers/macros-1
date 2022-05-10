@@ -12,6 +12,7 @@
 #include <G4_Input.C>
 #include <G4_Production.C>
 #include <G4_User.C>
+#include "matscan.C"
 
 #include <TROOT.h>
 #include <fun4all/Fun4AllDstOutputManager.h>
@@ -443,6 +444,10 @@ int Fun4All_G4_EICDetector(
   } else if (detectorSettings.find("BRRLMAT2") != std::string::npos) {
     G4BARRELEIC::SETTING::SAGITTA020X0 = true;
   }
+  if (detectorSettings.find("BST") != std::string::npos) {
+    Enable::BST = true;
+    Enable::BARREL = false;
+  }
   // fst
   Enable::FST = true;
 
@@ -632,6 +637,7 @@ int Fun4All_G4_EICDetector(
     Enable::CTTL = false;
     Enable::ETTL = false;
     Enable::EEMCH = false;
+    Enable::BST = false;
     Enable::RWELL = false;
     Enable::TrackingService = false;
     Enable::BARREL = false;
@@ -647,6 +653,9 @@ int Fun4All_G4_EICDetector(
     }
     if(detectorSettings.find("BRRL")!= std::string::npos ){
       Enable::BARREL = true;
+    }
+    if (detectorSettings.find("BST") != std::string::npos) {
+      Enable::BST = true;
     }
     if(detectorSettings.find("FST")!= std::string::npos ){
       Enable::FST = true;
@@ -1025,6 +1034,7 @@ int Fun4All_G4_EICDetector(
   // if we use a negative number of events we go back to the command line here
   if (nEvents < 0)
   {
+    // if (detectorSettings.find("SCAN") != std::string::npos) matscan();
     return 0;
   }
   // if we run any of the particle generators and use 0 it'll run forever

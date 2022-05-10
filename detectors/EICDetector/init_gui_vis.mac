@@ -29,3 +29,5 @@
 /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
 /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 /vis/viewer/set/background white
+
+/vis/viewer/set/lineSegmentsPerCircle 360

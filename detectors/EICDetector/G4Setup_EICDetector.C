@@ -29,6 +29,7 @@
 #include <G4_Pipe_EIC.C>
 #include <G4_PlugDoor_EIC.C>
 #include <G4_TTL_EIC.C>
+#include <G4_BST.C>
 #include <G4_TrackingSupport.C>
 #include <G4_Tracking_EIC.C>
 #include <G4_dRICH.C>
@@ -106,6 +107,7 @@ void G4Init()
   MagnetFieldInit();  // We want the field - even if the magnet volume is disabled
   if (Enable::HCALOUT) HCalOuterInit();
   if (Enable::DIRC) DIRCInit();
+  if (Enable::BST) BSTInit();
 
   //Forward
   if (Enable::FGEM) FGEM_Init();
@@ -202,6 +204,7 @@ int G4Setup()
   if (Enable::MAGNET) radius = Magnet(g4Reco, radius);
   if (Enable::HCALOUT) radius = HCalOuter(g4Reco, radius, 4);
   if (Enable::DIRC) DIRCSetup(g4Reco);
+  if (Enable::BST) BSTSetup(g4Reco);
 
   //Forward
   if (Enable::FGEM) FGEMSetup(g4Reco);
@@ -352,7 +355,7 @@ void DstCompress(Fun4AllDstOutputManager *out)
     //    out->StripNode("G4HIT_ZDC");
     //    out->StripNode("G4HIT_RomanPots");
     //    out->StripNode("G4HIT_B0detectors");
-    out->StripNode("G4HIT_SVTXSUPPORT");
+    out->StripNode("G4HIT_BSTSUPPORT");
     out->StripNode("G4HIT_CEMC_ELECTRONICS");
     out->StripNode("G4HIT_CEMC");
     out->StripNode("G4HIT_ABSORBER_CEMC");
