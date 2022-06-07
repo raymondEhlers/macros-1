@@ -123,6 +123,10 @@ namespace G4TrackingService
   double GlobalOffset = 0.0;
   double ShellThickness = 0.3;  //Thickness in cm
   int subsysID = 0;
+  namespace SETTING
+  {
+    bool BSTactive = false;
+  }  // namespace SETTING
 }  // namespace G4TrackingService
 
 vector<double> get_thickness(ServiceProperties *object)
@@ -275,14 +279,16 @@ double TrackingService(PHG4Reco *g4Reco, double radius)
     // Cone service from electron side uRwell1 to vertex support.
     cones.push_back(new ServiceProperties("ETrackingCone_uRwellToVertex", CuThickness, AlThickness, WaterThickness, PlasticThickness, CarbonThickness, 0, -1 * inner_uRwell_e_length, -1 * vtx_e_length, inner_uRwell_radius, vtx_support_radius));
 
-    // Sagitta Cylindrical Support Structure
-    cylinders.push_back(new ServiceProperties("BTrackingCyl_Sagitta", 0, 0, 0, 0, 0.1, 0, -1 * sagitta_support_e_length + gap, sagitta_support_h_length - gap, sagitta_support_radius + gap / 4, 0));
+    if(!G4TrackingService::SETTING::BSTactive){
+      // Sagitta Cylindrical Support Structure
+      cylinders.push_back(new ServiceProperties("BTrackingCyl_Sagitta", 0, 0, 0, 0, 0.1, 0, -1 * sagitta_support_e_length + gap, sagitta_support_h_length - gap, sagitta_support_radius + gap / 4, 0));
 
-    // Vertex Cylindrical Support Structure
-    cylinders.push_back(new ServiceProperties("BTrackingCyl_Vertex", 0, 0, 0, 0, shellX0, 0, -1 * vtx_e_length, vtx_h_length, vtx_support_radius, 0));
-
+      // Vertex Cylindrical Support Structure
+      cylinders.push_back(new ServiceProperties("BTrackingCyl_Vertex", 0, 0, 0, 0, shellX0, 0, -1 * vtx_e_length, vtx_h_length, vtx_support_radius, 0));
+    }
     // Cone service in H-region from vertex to inner uRwell
     cones.push_back(new ServiceProperties("HTrackingCone_VertexTouRwell", CuThickness, AlThickness, WaterThickness, PlasticThickness, CarbonThickness, 0, vtx_h_length, inner_uRwell_h_length, vtx_support_radius, inner_uRwell_radius));
+
 
     // Cylinder service to rest the uRwell in H region Plateau
     cylinders.push_back(new ServiceProperties("HTrackingRWellPlateau", CuThickness, AlThickness, WaterThickness, PlasticThickness, CarbonThickness, 0, inner_uRwell_h_length, inner_uRwell_h_length + plateau_length, inner_uRwell_radius, 0));

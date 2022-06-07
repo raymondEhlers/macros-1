@@ -447,6 +447,7 @@ int Fun4All_G4_EICDetector(
   if (detectorSettings.find("BST") != std::string::npos) {
     Enable::BST = true;
     Enable::BARREL = false;
+    G4TrackingService::SETTING::BSTactive = true;
   }
   // fst
   Enable::FST = true;
@@ -691,9 +692,10 @@ int Fun4All_G4_EICDetector(
     }
     if(detectorSettings.find("FEMC")!= std::string::npos ){
       Enable::FEMC = true;
-      if(detectorSettings.find("FWDC")!= std::string::npos )
+      if(detectorSettings.find("FWDC")!= std::string::npos ){
         G4FEMC::SETTING::FwdSquare = true;
         G4FEMC::SETTING::asymmetric = false;
+      }
     }
     if(detectorSettings.find("FGEM")!= std::string::npos )
       Enable::FGEM = true;
@@ -835,10 +837,14 @@ int Fun4All_G4_EICDetector(
   // ---------------
   // Magnet Settings
   //---------------
+  std::string fieldSettingToFind = "FIELD_";
   if (detectorSettings.find("NOFIELD") != std::string::npos) {
     const string magfield = "0.0"; // alternatively to specify a constant magnetic field, give a float number, which will be translated to solenoidal field in T, if string use as fieldmap name (including path)
     G4MAGNET::magfield = magfield;
     G4WORLD::WorldMaterial = "G4_Galactic"; // set to G4_GALACTIC for material scans
+  } else if (detectorSettings.find(fieldSettingToFind) != std::string::npos) {
+      auto pos = detectorSettings.find(fieldSettingToFind);
+      G4MAGNET::magfield = detectorSettings.substr(pos + fieldSettingToFind.size(), pos + fieldSettingToFind.size() + 3);
   } else {
     // const string magfield = "1.5"; // alternatively to specify a constant magnetic field, give a float number, which will be translated to solenoidal field in T, if string use as fieldmap name (including path)
     //  G4MAGNET::magfield = string(getenv("CALIBRATIONROOT")) + string("/Field/Map/sPHENIX.2d.root");  // default map from the calibration database

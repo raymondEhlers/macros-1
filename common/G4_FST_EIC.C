@@ -176,9 +176,9 @@ int make_LANL_FST_station(string name, PHG4Reco *g4Reco,
   fst->get_geometry().AddLayer("Metalconnection", "G4_Al", 15 * um, false, 100);
   fst->get_geometry().AddLayer("HDI", "G4_KAPTON", 20 * um, false, 100);
   fst->get_geometry().AddLayer("Cooling", "G4_WATER", 100 * um, false, 100);
-  fst->get_geometry().AddLayer("Support", "G4_GRAPHITE", 2 * mm, false, 100);
+  fst->get_geometry().AddLayer("Support", "G4_GRAPHITE", 50 * um, false, 100);
   fst->get_geometry().AddLayer("Support_Gap", "G4_AIR", 1 * cm, false, 100);
-  fst->get_geometry().AddLayer("Support2", "G4_GRAPHITE", 2 * mm, false, 100);
+  fst->get_geometry().AddLayer("Support2", "G4_GRAPHITE", 50 * um, false, 100);
 
   g4Reco->registerSubsystem(fst);
 
